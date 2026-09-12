@@ -1,0 +1,167 @@
+{
+  "info": {
+    "name": "Jari Center Backend - MVP",
+    "description": "Koleksi endpoint API Jari Center. Set variable base_url dan token di tab Variables collection ini setelah import.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:8000/api" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"andi@jaricenter.test\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/login", "host": ["{{base_url}}"], "path": ["login"] }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/logout", "host": ["{{base_url}}"], "path": ["logout"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Patient",
+      "item": [
+        {
+          "name": "Register Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nik\": \"3175010101680001\",\n  \"name\": \"Siti Aminah\",\n  \"date_of_birth\": \"1968-05-12\",\n  \"gender\": \"female\",\n  \"address\": \"Jl. Merdeka No. 10\",\n  \"phone\": \"081234567890\",\n  \"insurance_provider\": \"BPJS\",\n  \"insurance_number\": \"0001234567890\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/patients", "host": ["{{base_url}}"], "path": ["patients"] }
+          }
+        },
+        {
+          "name": "Identify Patient (by NIK)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/patients/identify?type=nik&value=3175010101680001",
+              "host": ["{{base_url}}"],
+              "path": ["patients", "identify"],
+              "query": [
+                { "key": "type", "value": "nik" },
+                { "key": "value", "value": "3175010101680001" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Identify Patient (by keyword)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/patients/identify?type=keyword&value=Siti",
+              "host": ["{{base_url}}"],
+              "path": ["patients", "identify"],
+              "query": [
+                { "key": "type", "value": "keyword" },
+                { "key": "value", "value": "Siti" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Visit",
+      "item": [
+        {
+          "name": "Register Visit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": 1,\n  \"facility_id\": 1,\n  \"polyclinic_id\": null,\n  \"identification_method\": \"nik\",\n  \"payment_method\": \"bpjs\",\n  \"bpjs_number\": \"0001234567890\",\n  \"referral_letter_number\": null,\n  \"notes\": null\n}"
+            },
+            "url": { "raw": "{{base_url}}/visits", "host": ["{{base_url}}"], "path": ["visits"] }
+          }
+        },
+        {
+          "name": "Get Visit Detail",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/visits/1", "host": ["{{base_url}}"], "path": ["visits", "1"] }
+          }
+        },
+        {
+          "name": "Update Visit Stage - Verified",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"stage\": \"verified\",\n  \"notes\": \"Data cocok, KTP sesuai\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/visits/1/stage", "host": ["{{base_url}}"], "path": ["visits", "1", "stage"] }
+          }
+        },
+        {
+          "name": "Update Visit Stage - Registered",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"stage\": \"registered\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/visits/1/stage", "host": ["{{base_url}}"], "path": ["visits", "1", "stage"] }
+          }
+        }
+      ]
+    }
+  ]
+}
