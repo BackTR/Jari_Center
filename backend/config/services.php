@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'jari_id' => [
+        'prefix' => env('JARI_ID_PREFIX', 'JARI'),
+    ],
+
 ];
