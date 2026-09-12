@@ -4,10 +4,12 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PatientController;
 use App\Http\Controllers\Api\VisitController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\DashboardController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/facilities/{facilityId}/dashboard', [DashboardController::class, 'show']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/patients', [PatientController::class, 'store']);
     Route::get('/patients/identify', [PatientController::class, 'identify']);
