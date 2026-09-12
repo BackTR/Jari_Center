@@ -33,4 +33,8 @@ class Facility extends Model
     {
         return $this->hasMany(PatientFacilityMapping::class);
     }
+    public function visits():HasMany
+    {
+        return $this->hasMany(visit::class);
+    }
 }
