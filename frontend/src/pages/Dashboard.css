@@ -1,0 +1,523 @@
+/* Variabel warna sekarang ada di theme.css (dipakai bersama Sidebar & AppHeader) */
+
+.db-content {
+  display: grid;
+  grid-template-columns: 2.1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.db-main-col,
+.db-side-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ============ KARTU DASAR ============ */
+.db-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+.db-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 16px;
+}
+
+.db-title-red {
+  color: var(--red);
+}
+.db-title-green {
+  color: var(--green);
+}
+
+.db-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+/* ============ TABS IDENTIFIKASI ============ */
+.db-tabs {
+  display: flex;
+  gap: 22px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.db-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0 2px 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.db-tab.active {
+  color: var(--teal);
+  border-bottom-color: var(--teal);
+}
+
+.db-scan-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 26px 10px;
+}
+
+.db-scan-icon {
+  width: 96px;
+  height: 96px;
+  border: 2px dashed #b7c0cf;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--teal);
+  background: #f6fbfa;
+}
+
+.db-or {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.db-search-box {
+  flex: 1;
+  max-width: 420px;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px 4px 4px 14px;
+  background: #fafbfc;
+}
+
+.db-search-box input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 13.5px;
+  padding: 10px 0;
+}
+
+.db-search-box button {
+  border: none;
+  background: var(--navy);
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.db-scan-hint {
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin: 0 0 20px;
+}
+
+/* ============ KARTU PASIEN ============ */
+.db-patient {
+  display: flex;
+  gap: 18px;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+
+.db-patient-photo {
+  width: 76px;
+  height: 76px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #dde3ec;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--text-muted);
+}
+
+.db-patient-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.db-patient-info {
+  flex: 1;
+}
+
+.db-patient-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.db-patient-name h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.db-patient-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 12px;
+  column-gap: 16px;
+}
+
+.db-patient-grid div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.db-label {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.db-patient-grid strong {
+  font-size: 13.5px;
+}
+
+/* ============ PILLS / BADGE ============ */
+.db-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.db-pill-green {
+  background: var(--green-bg);
+  color: var(--green);
+}
+.db-pill-red {
+  background: var(--red-bg);
+  color: var(--red);
+}
+.db-pill-orange {
+  background: var(--orange-bg);
+  color: var(--orange);
+}
+.db-pill-blue {
+  background: var(--blue-bg);
+  color: var(--blue);
+}
+
+/* ============ TRIPLE GRID (Alert / Administrasi / Kesehatan) ============ */
+.db-triple-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.db-card-alert {
+  border-color: #f6cfcf;
+}
+
+.db-alert-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border);
+  font-size: 13.5px;
+}
+
+.db-alert-icon {
+  color: var(--red);
+}
+
+.db-kv-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.db-kv-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px dashed var(--border);
+  font-size: 13.5px;
+}
+
+.db-kv-list li:last-child {
+  border-bottom: none;
+}
+
+.db-kv-list li > span:first-child {
+  color: var(--text-muted);
+}
+
+.db-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 14px 0 0;
+}
+
+.db-link-sm {
+  background: none;
+  border: none;
+  color: var(--blue);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ============ AKSI CEPAT ============ */
+.db-actions {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+
+.db-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.db-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(16, 24, 40, 0.08);
+}
+
+.db-action-blue {
+  color: var(--blue);
+  border-color: #cfe0fd;
+  background: var(--blue-bg);
+}
+.db-action-green {
+  color: var(--green);
+  border-color: #bfe8cf;
+  background: var(--green-bg);
+}
+.db-action-teal {
+  color: var(--teal);
+  border-color: #bfe3df;
+  background: #e9f7f5;
+}
+.db-action-purple {
+  color: var(--purple);
+  border-color: #ddcdfb;
+  background: var(--purple-bg);
+}
+.db-action-red {
+  color: #fff;
+  background: var(--red);
+  border-color: var(--red);
+}
+
+/* ============ SIDEBAR KANAN ============ */
+.db-verif {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.db-verif-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.db-verif-label {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--green);
+}
+
+.db-verif-desc {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.db-antrean-count {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.db-antrean-count strong {
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--blue);
+}
+
+.db-antrean-count span {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.db-antrean-current {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.db-notif-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.db-notif-header .db-card-title {
+  margin-bottom: 0;
+}
+
+.db-notif-list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.db-notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border-bottom: 1px dashed var(--border);
+  padding-bottom: 14px;
+  font-size: 13px;
+}
+
+.db-notif-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.db-notif-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.db-notif-warning .db-notif-icon {
+  background: var(--orange-bg);
+  color: var(--orange);
+}
+.db-notif-info .db-notif-icon {
+  background: var(--blue-bg);
+  color: var(--blue);
+}
+.db-notif-success .db-notif-icon {
+  background: var(--green-bg);
+  color: var(--green);
+}
+
+.db-notif-item strong {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.db-notif-item p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.db-notif-time {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1180px) {
+  .db-content {
+    grid-template-columns: 1fr;
+  }
+  .db-triple-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .db-actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .db-triple-grid {
+    grid-template-columns: 1fr;
+  }
+  .db-patient {
+    flex-direction: column;
+  }
+  .db-patient-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .db-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+}
