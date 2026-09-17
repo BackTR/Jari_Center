@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
-import { login } from "./Api";
+import { login } from "../../services/api";
 import "./Login.css";
 
 function Login() {

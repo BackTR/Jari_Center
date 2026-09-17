@@ -1,17 +1,15 @@
-import { Outlet } from "react-router-dom";
-import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
+import { Outlet } from "react-router-dom"; // <-- ini kurang
+import Header from "../components/Header/Header";
 
 function DashboardLayout() {
   return (
     <div className="app-layout">
       <Header />
-      <div className="app-body">
-        <Sidebar />
-        <main><Outlet /></main>
-      </div>
+      <main className="app-main">
+        <Outlet />
+      </main>
     </div>
   );
 }
 
-export default DashboardLayout; 
+export default DashboardLayout;
