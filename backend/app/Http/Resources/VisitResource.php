@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\PatientFacilityMapping;
+use Faker\Provider\Medical;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,6 +18,18 @@ class VisitResource extends JsonResource
                 'jari_id' => $this->patient->jari_id,
                 'name' => $this->patient->name,
             ],
+            'medical_record_number'=>optional(
+                PatientFacilityMapping::where('patient_id', $this->patient_id)
+                ->where('facility_id', $this->facility_id)
+                ->first()
+            )->medical_record_number,
+            'queue' => $this->whenLoaded('queue', function () {
+                return $this->queue ? [
+                    'queue_number' => $this->queue->queue_number,
+                    'status' => $this->queue->status,
+                    'queue_date' => $this->queue->queue_date->format('Y-m-d'),
+                ] : null;
+                }),
             'facility_id' => $this->facility_id,
             'polyclinic_id' => $this->polyclinic_id,
             'identification_method' => $this->identification_method,

@@ -17,4 +17,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/visits', [VisitController::class, 'store']);
     Route::get('/visits/{visit}', [VisitController::class, 'show']);
     Route::patch('/visits/{visit}/stage', [VisitController::class, 'updateStage']);
+    Route::get('/facilities/{facilityId}/queues', [DashboardController::class, 'queues']);
 });
