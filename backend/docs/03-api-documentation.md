@@ -195,6 +195,8 @@ Kalau `payment_method = bpjs`, field `bpjs_number` **wajib** diisi (validasi oto
     "patient": { "id": 1, "jari_id": "JARI-2026-04821793", "name": "Siti Aminah" },
     "facility_id": 1,
     "polyclinic_id": null,
+    "medical_record_number": "RM000000001",
+    "queue": { "queue_number": "P-001", "status": "waiting", "queue_date": "2026-09-12" },
     "identification_method": "nik",
     "payment_method": "bpjs",
     "bpjs_number": "0001234567890",
@@ -212,6 +214,10 @@ Kalau `payment_method = bpjs`, field `bpjs_number` **wajib** diisi (validasi oto
   }
 }
 ```
+
+Setiap kali visit dibuat, server otomatis:
+- Mencari/membuat **Nomor Rekam Medis** pasien di faskes itu (`medical_record_number`) — tetap sama kalau pasien sudah pernah berobat di faskes yang sama.
+- Membuat **nomor antrean** baru (`queue`) — sequential per faskes+poli+tanggal, reset tiap hari.
 
 ---
 
@@ -260,6 +266,142 @@ pending_verification → verified → registered → in_service → completed
 
 ---
 
+## 4. Dashboard Faskes
+
+### `GET /facilities/{facilityId}/dashboard`
+*(Perlu token)*
+
+Ringkasan kunjungan per faskes untuk 1 hari tertentu. Petugas hanya bisa akses dashboard faskes tempat dia bertugas (`facility_id` miliknya sendiri); `super_admin` bisa akses semua faskes.
+
+**Query params:**
+| Param | Wajib | Nilai |
+|---|---|---|
+| `date` | tidak | format `YYYY-MM-DD`, default hari ini |
+
+**Contoh:** `GET /facilities/1/dashboard?date=2026-09-12`
+
+**Response `200`:**
+```json
+{
+  "data": {
+    "date": "2026-09-12",
+    "total_visits_today": 3,
+    "by_status": {
+      "pending_verification": 1,
+      "verified": 0,
+      "registered": 1,
+      "in_service": 0,
+      "completed": 1,
+      "cancelled": 0
+    },
+    "by_payment_method": { "mandiri": 1, "bpjs": 2 },
+    "recent_visits": [
+      {
+        "id": 3,
+        "patient_id": 2,
+        "status": "completed",
+        "payment_method": "bpjs",
+        "created_at": "2026-09-12T10:15:00+00:00",
+        "patient": { "id": 2, "jari_id": "JARI-2026-01122334", "name": "Budi Santoso" }
+      }
+    ]
+  }
+}
+```
+
+**Response `403`** (akses ke faskes lain, bukan `super_admin`):
+```json
+{ "message": "Anda tidak memiliki akses ke dashboard faskes ini." }
+```
+
+---
+
+### `GET /facilities/{facilityId}/queues`
+*(Perlu token)*
+
+Daftar antrean hari ini di faskes tersebut, urut berdasarkan nomor antrean. Otorisasi sama seperti endpoint dashboard di atas (hanya faskes sendiri, kecuali `super_admin`).
+
+**Query params:**
+| Param | Wajib | Nilai |
+|---|---|---|
+| `polyclinic_id` | tidak | filter ke satu poli tertentu |
+| `date` | tidak | format `YYYY-MM-DD`, default hari ini |
+
+**Response `200`:**
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "queue_number": "P-001",
+      "status": "waiting",
+      "polyclinic": "Poli Penyakit Dalam",
+      "patient": { "jari_id": "JARI-2026-04821793", "name": "Siti Aminah" },
+      "called_at": null
+    }
+  ]
+}
+```
+
+---
+
+## 5. Fingerprint Simulation
+
+> ⚠️ **Simulasi, bukan biometric matching sungguhan.** Sistem ini mencocokkan hash persis dari string template yang dikirim client. Fingerprint asli menghasilkan template yang sedikit berbeda tiap scan dan butuh *fuzzy matching* dengan threshold kemiripan — di luar scope MVP ini. Cukup untuk mensimulasikan alur "Identifikasi via Sidik Jari" di dashboard, tidak untuk keamanan biometrik produksi.
+
+### `POST /patients/{patientId}/fingerprint/enroll`
+*(Perlu token)*
+
+Mendaftarkan "template" sidik jari (string apa saja yang mewakili hasil scan simulasi) ke seorang pasien.
+
+**Request body:**
+```json
+{ "template": "SIMULATED_FP_TEMPLATE_SITI_AMINAH_001" }
+```
+
+**Response `200`:**
+```json
+{
+  "message": "Sidik jari berhasil didaftarkan (simulasi).",
+  "data": { "id": 1, "jari_id": "JARI-2026-04821793", "name": "Siti Aminah", "...": "..." }
+}
+```
+
+**Response `409`** (template sudah terdaftar atas pasien lain):
+```json
+{ "message": "Sidik jari ini sudah terdaftar atas pasien lain." }
+```
+
+**Response `404`** kalau `patientId` tidak ditemukan.
+
+---
+
+### `POST /fingerprint/match`
+*(Perlu token)*
+
+Mencari pasien berdasarkan template sidik jari — dipakai di panel "Identifikasi Pasien" tab Sidik Jari pada dashboard.
+
+**Request body:**
+```json
+{ "template": "SIMULATED_FP_TEMPLATE_SITI_AMINAH_001" }
+```
+
+**Response `200`** (cocok):
+```json
+{
+  "matched": true,
+  "message": "Pasien teridentifikasi.",
+  "data": { "id": 1, "jari_id": "JARI-2026-04821793", "name": "Siti Aminah", "...": "..." }
+}
+```
+
+**Response `200`** (tidak cocok — bukan error, hasil valid):
+```json
+{ "matched": false, "message": "Sidik jari tidak cocok dengan data pasien manapun.", "data": null }
+```
+
+---
+
 ## Catatan untuk Frontend
 
 - Semua response sukses dibungkus `{ "data": ... }` (standar Laravel API Resource).
@@ -267,9 +409,11 @@ pending_verification → verified → registered → in_service → completed
 - `jari_id` **selalu** di-generate backend. Frontend tidak pernah mengirim atau mengedit field ini.
 - Kalau dapat `401` di endpoint manapun (selain `/login`), berarti token expired/invalid — arahkan user ke halaman login lagi.
 
-## Belum tersedia (menyusul)
+## Status MVP
 
-- Nomor Rekam Medis per faskes (`patient_facility_mappings`) — belum ada endpoint, belum terhubung ke `/visits`.
-- Nomor antrean (`queues`) — belum ada endpoint, belum terhubung ke `/visits`.
-- Simulasi fingerprint — belum ada endpoint.
-- Dashboard/statistik faskes — belum ada endpoint.
+Semua modul inti dari brief sudah tersedia: Auth, Patient Identity, Jari ID Generator, Patient Facility Mapping (Nomor RM), Queue, Visit Registration dengan stage tracking, Dashboard Faskes, dan Fingerprint Simulation.
+
+**Belum tersedia (di luar scope MVP saat ini, menyusul di fase berikutnya):**
+- Integrasi SATUSEHAT (OAuth + FHIR Client + IHS Patient ID)
+- Rekam medis penuh, resep, hasil lab detail
+- Mode IGD (alur darurat terpisah)
