@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\PatientController;
 use App\Http\Controllers\Api\VisitController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\FingerprintController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -18,4 +19,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/visits/{visit}', [VisitController::class, 'show']);
     Route::patch('/visits/{visit}/stage', [VisitController::class, 'updateStage']);
     Route::get('/facilities/{facilityId}/queues', [DashboardController::class, 'queues']);
+    Route::post('/patients/{patientId}/fingerprint/enroll', [FingerprintController::class, 'enroll']);
+    Route::post('/fingerprint/match', [FingerprintController::class, 'match']);
 });
