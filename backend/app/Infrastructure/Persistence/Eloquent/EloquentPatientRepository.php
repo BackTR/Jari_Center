@@ -36,4 +36,16 @@ class EloquentPatientRepository implements PatientRepositoryInterface
     {
         return Patient::where('jari_id', $jariId)->exists();
     }
+
+    public function findByFingerprintHash(string $hash): ?Patient
+    {
+        return Patient::where('fingerprint_template_hash', $hash)->first();
+    }
+
+    public function updateFingerprintHash(Patient $patient, string $hash): Patient
+    {
+        $patient->update(['fingerprint_template_hash' => $hash]);
+
+        return $patient->fresh();
+    }
 }
