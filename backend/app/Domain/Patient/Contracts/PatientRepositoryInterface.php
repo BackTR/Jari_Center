@@ -16,4 +16,8 @@ interface PatientRepositoryInterface
     public function create(array $data): Patient;
 
     public function existsByJariId(string $jariId): bool;
+
+    public function findByFingerprintHash(string $hash): ?Patient;
+
+    public function updateFingerprintHash(Patient $patient, string $hash): Patient;
 }
