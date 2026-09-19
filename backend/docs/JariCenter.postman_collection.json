@@ -162,6 +162,82 @@
           }
         }
       ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Facility Dashboard Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/facilities/1/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["facilities", "1", "dashboard"]
+            }
+          }
+        },
+        {
+          "name": "Facility Queue List",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/facilities/1/queues",
+              "host": ["{{base_url}}"],
+              "path": ["facilities", "1", "queues"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Fingerprint (Simulation)",
+      "item": [
+        {
+          "name": "Enroll Fingerprint",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"template\": \"SIMULATED_FP_TEMPLATE_SITI_AMINAH_001\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/patients/1/fingerprint/enroll",
+              "host": ["{{base_url}}"],
+              "path": ["patients", "1", "fingerprint", "enroll"]
+            }
+          }
+        },
+        {
+          "name": "Match Fingerprint",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"template\": \"SIMULATED_FP_TEMPLATE_SITI_AMINAH_001\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/fingerprint/match", "host": ["{{base_url}}"], "path": ["fingerprint", "match"] }
+          }
+        }
+      ]
     }
   ]
 }
