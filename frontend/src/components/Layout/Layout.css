@@ -1,0 +1,1131 @@
+/* ==================================================
+   JARI CENTER - APP LAYOUT
+================================================== */
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 80% 10%,
+      rgba(18, 183, 203, 0.08),
+      transparent 28%
+    ),
+    #f6fbfd;
+}
+
+
+/* ==================================================
+   SIDEBAR
+================================================== */
+
+.sidebar {
+  width: 278px;
+  height: 100vh;
+  flex-shrink: 0;
+
+  position: sticky;
+  top: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f8fcfd 55%,
+      #f2fafb 100%
+    );
+
+  border-right: 1px solid #dcecf1;
+
+  box-shadow:
+    8px 0 30px rgba(6, 63, 112, 0.05);
+
+  overflow: hidden;
+
+  transition:
+    width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s ease;
+}
+
+
+/* ==================================================
+   SIDEBAR TOP
+================================================== */
+
+.sidebar-top {
+  position: relative;
+
+  min-height: 92px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 22px 18px;
+
+  transition:
+    padding 0.35s ease;
+}
+
+
+/* ==================================================
+   BRAND
+================================================== */
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  min-width: 0;
+
+  transition:
+    transform 0.35s ease,
+    opacity 0.25s ease;
+}
+
+
+.sidebar-brand-logo {
+  width: 48px;
+  height: 48px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #0874c9;
+
+  background:
+    linear-gradient(
+      145deg,
+      #e8fbff,
+      #ffffff
+    );
+
+  border: 1px solid #cdebf3;
+
+  border-radius: 15px;
+
+  box-shadow:
+    0 7px 20px rgba(0, 116, 201, 0.10);
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+
+.sidebar-brand-logo::before {
+  content: "";
+
+  position: absolute;
+
+  width: 70px;
+  height: 70px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(14, 188, 190, 0.18),
+      transparent 65%
+    );
+
+  pointer-events: none;
+}
+
+
+.sidebar-brand-logo svg {
+  position: relative;
+  z-index: 1;
+}
+
+
+.sidebar-brand-logo-img {
+  width: 30px;
+  height: 30px;
+
+  position: relative;
+  z-index: 1;
+
+  object-fit: contain;
+}
+
+
+.sidebar-brand-text {
+  min-width: 0;
+
+  white-space: nowrap;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.35s ease;
+}
+
+
+.sidebar-brand-name {
+  color: #063d78;
+
+  font-family: var(--font-display, Georgia, serif);
+
+  font-size: 22px;
+  font-weight: 700;
+
+  line-height: 1.05;
+
+  letter-spacing: -0.4px;
+}
+
+
+.sidebar-brand-name span {
+  color: #09aeb7;
+}
+
+
+.sidebar-brand-tag {
+  margin-top: 5px;
+
+  color: #6b8b9c;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  letter-spacing: 0.4px;
+}
+
+
+/* ==================================================
+   THREE DOT BUTTON
+================================================== */
+
+.sidebar-toggle {
+  width: 36px;
+  height: 36px;
+
+  flex-shrink: 0;
+
+  margin-left: auto;
+
+  border: 1px solid #d7eaf0;
+  border-radius: 11px;
+
+  background: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 12px rgba(0, 72, 120, 0.07);
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.sidebar-toggle span {
+  width: 4px;
+  height: 4px;
+
+  border-radius: 50%;
+
+  background: #0868b7;
+
+  transition:
+    transform 0.25s ease,
+    background 0.2s ease;
+}
+
+
+.sidebar-toggle:hover {
+  background: #eefaff;
+
+  border-color: #9bdce9;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 7px 18px rgba(0, 120, 190, 0.12);
+}
+
+
+.sidebar-toggle:hover span {
+  background: #08aeb7;
+}
+
+
+/* ==================================================
+   DIVIDER
+================================================== */
+
+.sidebar-divider {
+  height: 1px;
+
+  margin: 0 18px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #d7eaf0,
+      transparent
+    );
+}
+
+
+/* ==================================================
+   NAVIGATION
+================================================== */
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+
+  padding: 24px 14px;
+
+  flex: 1;
+
+  overflow-y: auto;
+}
+
+
+.sidebar-section-label {
+  padding: 0 13px 9px;
+
+  color: #86a2b0;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.3s ease;
+}
+
+
+/* ==================================================
+   NAV LINK
+================================================== */
+
+.sidebar-link {
+  position: relative;
+
+  min-height: 52px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 0 13px;
+
+  color: #537487;
+
+  text-decoration: none;
+
+  border: 1px solid transparent;
+  border-radius: 14px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  overflow: hidden;
+
+  transition:
+    color 0.22s ease,
+    background 0.22s ease,
+    border-color 0.22s ease,
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+
+.sidebar-link::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 50%;
+
+  width: 3px;
+  height: 0;
+
+  border-radius: 0 5px 5px 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      #0874c9,
+      #08b5b5
+    );
+
+  transform: translateY(-50%);
+
+  transition:
+    height 0.25s ease;
+}
+
+
+.sidebar-link:hover {
+  color: #075ca3;
+
+  background: #effaff;
+
+  border-color: #d6edf3;
+
+  transform: translateX(3px);
+}
+
+
+.sidebar-link--active {
+  color: #075da8;
+
+  background:
+    linear-gradient(
+      105deg,
+      #e7f6ff 0%,
+      #effcff 65%,
+      #f3ffff 100%
+    );
+
+  border-color: #c6e7f0;
+
+  box-shadow:
+    0 7px 20px rgba(0, 105, 175, 0.08);
+}
+
+
+.sidebar-link--active::before {
+  height: 27px;
+}
+
+
+/* ==================================================
+   NAV ICON
+================================================== */
+
+.sidebar-link-icon {
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  color: #337a9e;
+
+  background: #f0f8fb;
+
+  transition:
+    background 0.22s ease,
+    color 0.22s ease,
+    transform 0.22s ease;
+}
+
+
+.sidebar-link-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+
+.sidebar-link:hover .sidebar-link-icon {
+  color: #0874c9;
+
+  background: #ffffff;
+
+  transform: scale(1.05);
+}
+
+
+.sidebar-link--active .sidebar-link-icon {
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      145deg,
+      #0869b8,
+      #09aeb8
+    );
+
+  box-shadow:
+    0 5px 12px rgba(0, 112, 190, 0.20);
+}
+
+
+/* ==================================================
+   NAV LABEL
+================================================== */
+
+.sidebar-link-label {
+  flex: 1;
+
+  white-space: nowrap;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.3s ease;
+}
+
+
+/* ==================================================
+   NAV ARROW
+================================================== */
+
+.sidebar-link-arrow {
+  width: 18px;
+  height: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #9ab5c2;
+
+  opacity: 0;
+
+  transform: translateX(-5px);
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+.sidebar-link-arrow svg {
+  width: 14px;
+  height: 14px;
+}
+
+
+.sidebar-link:hover .sidebar-link-arrow,
+.sidebar-link--active .sidebar-link-arrow {
+  opacity: 1;
+
+  transform: translateX(0);
+}
+
+
+/* ==================================================
+   SIDEBAR BOTTOM
+================================================== */
+
+.sidebar-bottom {
+  padding: 14px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 11px;
+
+  border-top: 1px solid #dcecf1;
+
+  background:
+    rgba(255, 255, 255, 0.7);
+}
+
+
+/* ==================================================
+   SYSTEM STATUS
+================================================== */
+
+.sidebar-status {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 10px 11px;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #effdf8,
+      #f4fcff
+    );
+
+  border: 1px solid #d7efe8;
+}
+
+
+.sidebar-status-dot {
+  width: 9px;
+  height: 9px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #11b87c;
+
+  box-shadow:
+    0 0 0 4px rgba(17, 184, 124, 0.10);
+
+  animation: statusPulse 2s infinite;
+}
+
+
+@keyframes statusPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 4px rgba(17, 184, 124, 0.10);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 7px rgba(17, 184, 124, 0.03);
+  }
+}
+
+
+.sidebar-status-text {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+
+  min-width: 0;
+
+  white-space: nowrap;
+
+  transition:
+    opacity 0.2s ease;
+}
+
+
+.sidebar-status-text strong {
+  color: #08785e;
+
+  font-size: 11px;
+}
+
+
+.sidebar-status-text span {
+  color: #72958d;
+
+  font-size: 10px;
+}
+
+
+/* ==================================================
+   USER
+================================================== */
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 8px 5px;
+}
+
+
+.sidebar-user-avatar {
+  width: 37px;
+  height: 37px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      145deg,
+      #07579f,
+      #0aaab5
+    );
+
+  font-size: 14px;
+  font-weight: 800;
+
+  box-shadow:
+    0 5px 13px rgba(0, 91, 160, 0.20);
+}
+
+
+.sidebar-user-info {
+  min-width: 0;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.3s ease;
+}
+
+
+.sidebar-user-name {
+  max-width: 180px;
+
+  overflow: hidden;
+
+  color: #123f62;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.sidebar-user-role {
+  margin-top: 2px;
+
+  color: #829ca9;
+
+  font-size: 11px;
+
+  text-transform: capitalize;
+}
+
+
+.sidebar-user-facility {
+  margin-top: 2px;
+
+  max-width: 180px;
+
+  overflow: hidden;
+
+  color: #9ab0bc;
+
+  font-size: 10px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* ==================================================
+   LOGOUT
+================================================== */
+
+.sidebar-logout {
+  width: 100%;
+  min-height: 42px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 0 12px;
+
+  border: 1px solid #e0ebef;
+  border-radius: 11px;
+
+  background: #ffffff;
+
+  color: #708996;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+.sidebar-logout svg {
+  width: 18px;
+  height: 18px;
+}
+
+
+.sidebar-logout:hover {
+  color: #d94e5c;
+
+  background: #fff7f7;
+
+  border-color: #f0cfd2;
+
+  transform: translateY(-1px);
+}
+
+
+/* ==================================================
+   MAIN CONTENT
+   Konten mengisi ruang kosong secara otomatis
+   mengikuti lebar sidebar (terbuka/tertutup).
+================================================== */
+
+.app-content {
+  flex: 1;
+
+  min-width: 0;
+
+  min-height: 100vh;
+
+  padding: 20px 28px 32px;
+
+  overflow-x: hidden;
+
+  background:
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(12, 181, 194, 0.07),
+      transparent 28%
+    ),
+    #f7fbfd;
+
+  transition:
+    padding 0.35s ease;
+}
+
+/* Konten tetap fluid mengikuti sisa ruang, dibatasi
+   supaya tidak terlalu melebar di layar ultra-wide */
+.app-content > * {
+  width: 100%;
+  max-width: 1600px;
+
+  margin: 0 auto;
+
+  transition: max-width 0.35s ease;
+}
+
+/* Saat sidebar tertutup, ruang konten lebih lebar,
+   jadi batas maksimalnya ikut dilonggarkan */
+.sidebar-is-closed .app-content > * {
+  max-width: 1880px;
+}
+
+
+/* ==================================================
+   CLOSED SIDEBAR
+================================================== */
+
+.sidebar-is-closed .sidebar {
+  width: 86px;
+}
+
+
+.sidebar-is-closed .sidebar-top {
+  padding: 22px 15px;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+
+.sidebar-is-closed .sidebar-brand {
+  transform: translateX(0);
+}
+
+
+.sidebar-is-closed .sidebar-brand-text {
+  display: none;
+}
+
+
+.sidebar-is-closed .sidebar-brand-logo {
+  width: 48px;
+  height: 48px;
+}
+
+
+.sidebar-is-closed .sidebar-toggle {
+  margin-left: 0;
+
+  transform: rotate(90deg);
+}
+
+
+.sidebar-is-closed .sidebar-toggle:hover {
+  transform: rotate(90deg) translateY(-1px);
+}
+
+
+.sidebar-is-closed .sidebar-nav {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+
+.sidebar-is-closed .sidebar-section-label {
+  opacity: 0;
+
+  height: 0;
+
+  padding: 0;
+
+  overflow: hidden;
+}
+
+
+.sidebar-is-closed .sidebar-link {
+  justify-content: center;
+
+  padding: 0;
+
+  gap: 0;
+}
+
+
+.sidebar-is-closed .sidebar-link-label {
+  display: none;
+}
+
+
+.sidebar-is-closed .sidebar-link-arrow {
+  display: none;
+}
+
+
+.sidebar-is-closed .sidebar-link::before {
+  left: -1px;
+}
+
+
+.sidebar-is-closed .sidebar-status {
+  justify-content: center;
+
+  padding: 12px 0;
+}
+
+
+.sidebar-is-closed .sidebar-status-text {
+  display: none;
+}
+
+
+.sidebar-is-closed .sidebar-user {
+  justify-content: center;
+}
+
+
+.sidebar-is-closed .sidebar-user-info {
+  display: none;
+}
+
+
+.sidebar-is-closed .sidebar-logout {
+  justify-content: center;
+
+  padding: 0;
+}
+
+
+.sidebar-is-closed .sidebar-logout span {
+  display: none;
+}
+
+
+/* ==================================================
+   SIDEBAR SCROLLBAR
+================================================== */
+
+.sidebar-nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: #cde3ea;
+
+  border-radius: 20px;
+}
+
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: #9fcbd8;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 86px;
+  }
+
+  .sidebar-top {
+    padding: 22px 15px;
+
+    flex-direction: column;
+
+    gap: 12px;
+  }
+
+  .sidebar-brand-text {
+    display: none;
+  }
+
+  .sidebar-toggle {
+    margin-left: 0;
+
+    transform: rotate(90deg);
+  }
+
+  .sidebar-section-label {
+    opacity: 0;
+
+    height: 0;
+
+    padding: 0;
+
+    overflow: hidden;
+  }
+
+  .sidebar-link {
+    justify-content: center;
+
+    padding: 0;
+
+    gap: 0;
+  }
+
+  .sidebar-link-label,
+  .sidebar-link-arrow {
+    display: none;
+  }
+
+  .sidebar-status-text,
+  .sidebar-user-info,
+  .sidebar-logout span {
+    display: none;
+  }
+
+  .sidebar-status,
+  .sidebar-user,
+  .sidebar-logout {
+    justify-content: center;
+  }
+
+  .sidebar-logout {
+    padding: 0;
+  }
+
+  .app-content {
+    padding: 16px 18px 24px;
+  }
+
+  .app-content > *,
+  .sidebar-is-closed .app-content > * {
+    max-width: 100%;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .sidebar {
+    width: 0;
+
+    border-right: none;
+
+    box-shadow: none;
+  }
+
+  .sidebar-is-open .sidebar {
+    width: 260px;
+
+    box-shadow:
+      10px 0 40px rgba(0, 50, 90, 0.15);
+  }
+
+  .sidebar-is-open .sidebar-brand-text {
+    display: block;
+  }
+
+  .sidebar-is-open .sidebar-top {
+    flex-direction: row;
+
+    gap: 12px;
+  }
+
+  .sidebar-is-open .sidebar-toggle {
+    margin-left: auto;
+
+    transform: none;
+  }
+
+  .sidebar-is-open .sidebar-link {
+    justify-content: flex-start;
+
+    padding: 0 13px;
+
+    gap: 13px;
+  }
+
+  .sidebar-is-open .sidebar-link-label {
+    display: block;
+  }
+
+  .sidebar-is-open .sidebar-link-arrow {
+    display: flex;
+  }
+
+  .sidebar-is-open .sidebar-section-label {
+    opacity: 1;
+
+    height: auto;
+
+    padding: 0 13px 9px;
+  }
+
+  .sidebar-is-open .sidebar-status-text {
+    display: flex;
+  }
+
+  .sidebar-is-open .sidebar-user-info {
+    display: block;
+  }
+
+  .sidebar-is-open .sidebar-user-facility {
+    display: block;
+  }
+
+  .sidebar-is-open .sidebar-logout {
+    justify-content: flex-start;
+
+    padding: 0 12px;
+  }
+
+  .sidebar-is-open .sidebar-logout span {
+    display: inline;
+  }
+
+  .app-content {
+    padding: 12px 14px 20px;
+  }
+}

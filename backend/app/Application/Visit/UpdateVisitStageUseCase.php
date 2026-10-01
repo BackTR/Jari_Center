@@ -5,6 +5,7 @@ namespace App\Application\Visit;
 use App\Domain\Visit\Contracts\VisitRepositoryInterface;
 use App\Models\Visit;
 use App\Models\VisitStageLog;
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 
 class UpdateVisitStageUseCase
@@ -34,16 +35,18 @@ class UpdateVisitStageUseCase
             );
         }
 
-        $updatedVisit = $this->visitRepository->updateStatus($visit, $newStage);
+        return DB::transaction(function () use ($visit, $newStage, $notes, $changedByUserId) {
+            $updatedVisit = $this->visitRepository->updateStatus($visit, $newStage);
 
-        VisitStageLog::create([
-            'visit_id' => $visit->id,
-            'changed_by' => $changedByUserId,
-            'stage' => $newStage,
-            'notes' => $notes,
-            'created_at' => now(),
-        ]);
+            VisitStageLog::create([
+                'visit_id' => $visit->id,
+                'changed_by' => $changedByUserId,
+                'stage' => $newStage,
+                'notes' => $notes,
+                'created_at' => now(),
+            ]);
 
-        return $updatedVisit->fresh('stageLogs');
+            return $updatedVisit->fresh('stageLogs');
+        });
     }
 }

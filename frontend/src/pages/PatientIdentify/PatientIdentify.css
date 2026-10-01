@@ -1,0 +1,784 @@
+/* =========================================================
+   PATIENT IDENTIFY
+   ========================================================= */
+
+.patient-identify-page {
+  width: 100%;
+}
+
+
+/* =========================================================
+   PANEL
+   ========================================================= */
+
+.identify-panel {
+  width: 100%;
+  padding: 0;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
+.identify-tabs {
+  display: flex;
+  align-items: center;
+
+  min-height: 58px;
+
+  padding: 0 22px;
+
+  gap: 4px;
+
+  border-bottom: 1px solid #e3ebf0;
+
+  background: #ffffff;
+
+  box-sizing: border-box;
+}
+
+
+.identify-tab {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 58px;
+
+  padding: 0 14px;
+
+  gap: 8px;
+
+  border: 0;
+
+  outline: none;
+
+  background: transparent;
+
+  color: #718394;
+
+  font-family: inherit;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+
+.identify-tab:hover {
+  color: #1195a7;
+
+  background: #f8fcfd;
+}
+
+
+.identify-tab.active {
+  color: #0b9cad;
+}
+
+
+.identify-tab.active::after {
+  content: '';
+
+  position: absolute;
+
+  left: 10px;
+  right: 10px;
+  bottom: -1px;
+
+  height: 2px;
+
+  background: #13a5b6;
+
+  border-radius: 3px 3px 0 0;
+}
+
+
+/* =========================================================
+   SEARCH AREA
+   ========================================================= */
+
+.search-method-content {
+  width: 100%;
+
+  padding: 34px 36px 40px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.identify-form {
+  width: 100%;
+
+  margin: 0;
+
+  padding: 0;
+}
+
+
+/*
+   SEMUA KOLOM BERADA DALAM SATU GRID.
+
+   Kolom 1 = Dropdown
+   Kolom 2 = Input
+   Kolom 3 = Button
+*/
+
+.identify-form-row {
+  display: grid;
+
+  grid-template-columns:
+    330px
+    minmax(0, 1fr)
+    178px;
+
+  gap: 20px;
+
+  width: 100%;
+
+  margin: 0;
+
+  padding: 0;
+
+  box-sizing: border-box;
+
+  align-items: start;
+}
+
+
+/* =========================================================
+   FIELD
+   ========================================================= */
+
+.identify-field,
+.identify-button-field {
+  width: 100%;
+
+  min-width: 0;
+
+  margin: 0;
+
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+
+/*
+   Label semua memiliki tinggi yang SAMA.
+*/
+
+.identify-field > label,
+.identify-label-spacer {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+
+  height: 18px;
+
+  min-height: 18px;
+
+  margin: 0 0 8px;
+
+  padding: 0;
+
+  box-sizing: border-box;
+
+  color: #536d81;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  line-height: 18px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.35px;
+}
+
+
+/*
+   Spacer tombol sengaja dibuat sama persis
+   dengan area label.
+*/
+
+.identify-label-spacer {
+  visibility: hidden;
+}
+
+
+/* =========================================================
+   SELECT
+   ========================================================= */
+
+.identify-field select {
+  display: block;
+
+  width: 100%;
+
+  height: 48px;
+
+  min-height: 48px;
+
+  margin: 0;
+
+  padding: 0 15px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d3e2eb;
+
+  border-radius: 10px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #174b73;
+
+  font-family: inherit;
+
+  font-size: 11px;
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+
+.identify-field select:hover {
+  border-color: #b9d4e0;
+}
+
+
+.identify-field select:focus {
+  border-color: #159daf;
+
+  box-shadow:
+    0 0 0 3px rgba(21, 157, 175, 0.08);
+}
+
+
+/* =========================================================
+   SEARCH INPUT
+   ========================================================= */
+
+.identify-input {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+
+  height: 48px;
+
+  min-height: 48px;
+
+  margin: 0;
+
+  padding: 0 14px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d3e2eb;
+
+  border-radius: 10px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #7890a2;
+
+  overflow: hidden;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+
+.identify-input:hover {
+  border-color: #b9d4e0;
+}
+
+
+.identify-input:focus-within {
+  border-color: #159daf;
+
+  box-shadow:
+    0 0 0 3px rgba(21, 157, 175, 0.08);
+}
+
+
+/*
+   ICON SEARCH
+*/
+
+.identify-input > svg {
+  display: block;
+
+  width: 19px;
+  height: 19px;
+
+  flex: 0 0 19px;
+
+  margin: 0 10px 0 0;
+
+  color: #7890a2;
+}
+
+
+/*
+   PENTING:
+   Input tidak boleh punya border sendiri.
+   Jadi tidak muncul border dobel.
+*/
+
+.identify-input input,
+.identify-input input:focus,
+.identify-input input:hover,
+.identify-input input:active {
+  display: block;
+
+  width: 100%;
+
+  min-width: 0;
+
+  height: 100%;
+
+  margin: 0;
+
+  padding: 0;
+
+  border: none !important;
+
+  outline: none !important;
+
+  box-shadow: none !important;
+
+  border-radius: 0;
+
+  background: transparent !important;
+
+  color: #294d6b;
+
+  font-family: inherit;
+
+  font-size: 11px;
+
+  font-weight: 400;
+
+  appearance: none;
+}
+
+
+.identify-input input::placeholder {
+  color: #9aafbf;
+
+  opacity: 1;
+}
+
+
+/* =========================================================
+   BUTTON
+   ========================================================= */
+
+.identify-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  height: 48px;
+
+  min-height: 48px;
+
+  margin: 0;
+
+  padding: 0 16px;
+
+  box-sizing: border-box;
+
+  gap: 8px;
+
+  border: 0;
+
+  border-radius: 10px;
+
+  outline: none;
+
+  font-family: inherit;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  line-height: 1;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
+}
+
+
+.identify-submit:not(:disabled):hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 7px 16px rgba(16, 82, 137, 0.15);
+}
+
+
+.identify-submit:not(:disabled):active {
+  transform: translateY(0);
+}
+
+
+.identify-submit:disabled {
+  opacity: 0.65;
+
+  cursor: not-allowed;
+}
+
+
+.identify-submit svg {
+  flex: 0 0 auto;
+}
+
+
+/* =========================================================
+   ALERT
+   ========================================================= */
+
+.alert {
+  width: 100%;
+
+  margin: 18px 0 0;
+
+  padding: 12px 14px;
+
+  box-sizing: border-box;
+
+  border-radius: 9px;
+
+  font-size: 9px;
+
+  line-height: 1.5;
+}
+
+
+.alert-error {
+  color: #a23d3d;
+
+  background: #fff3f3;
+
+  border: 1px solid #efd7d7;
+}
+
+
+.alert-empty {
+  color: #61778a;
+
+  background: #f6fafc;
+
+  border: 1px solid #dfeaf0;
+}
+
+
+.alert-empty strong {
+  color: #116d91;
+}
+
+
+/* =========================================================
+   RESULTS
+   ========================================================= */
+
+.identify-results {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  width: 100%;
+
+  margin: 18px 0 0;
+
+  padding: 0;
+}
+
+
+/* =========================================================
+   OTHER IDENTIFICATION METHOD
+   ========================================================= */
+
+.identify-method-content {
+  width: 100%;
+
+  padding: 28px 36px;
+
+  box-sizing: border-box;
+}
+
+
+.scanner-area {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 28px;
+
+  min-height: 145px;
+
+  border-bottom: 1px solid #edf1f4;
+}
+
+
+.scanner-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 94px;
+  height: 94px;
+
+  flex: 0 0 94px;
+
+  border: 2px dashed #cbdde4;
+
+  border-radius: 13px;
+
+  background: #f9fcfd;
+}
+
+
+.scanner-icon.fingerprint {
+  color: #159da6;
+}
+
+
+.scanner-icon.face {
+  color: #3886c3;
+}
+
+
+.scanner-icon.qr {
+  color: #725ec6;
+}
+
+
+.scanner-text {
+  max-width: 430px;
+}
+
+
+.scanner-text h2 {
+  margin: 0;
+
+  color: #183e61;
+
+  font-size: 15px;
+
+  font-weight: 700;
+}
+
+
+.scanner-text p {
+  margin: 7px 0 0;
+
+  color: #8494a1;
+
+  font-size: 9px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   METHOD STATUS
+   ========================================================= */
+
+.method-info {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding-top: 16px;
+
+  color: #8998a5;
+
+  font-size: 8px;
+}
+
+
+.method-status-dot {
+  width: 7px;
+  height: 7px;
+
+  flex: 0 0 7px;
+
+  border-radius: 50%;
+
+  background: #23ad70;
+
+  box-shadow:
+    0 0 0 3px rgba(35, 173, 112, 0.10);
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .search-method-content {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+
+  .identify-form-row {
+    grid-template-columns:
+      240px
+      minmax(0, 1fr)
+      155px;
+
+    gap: 14px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+  .identify-tabs {
+    padding: 0 12px;
+
+    overflow-x: auto;
+
+    scrollbar-width: none;
+  }
+
+
+  .identify-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+
+  .identify-tab {
+    flex: 0 0 auto;
+
+    padding: 0 10px;
+  }
+
+
+  .search-method-content {
+    padding: 24px 18px 28px;
+  }
+
+
+  .identify-form-row {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 14px;
+  }
+
+
+  .identify-field,
+  .identify-button-field {
+    width: 100%;
+  }
+
+
+  .identify-submit {
+    width: 100%;
+  }
+
+
+  .identify-label-spacer {
+    display: none;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .identify-method-content {
+    padding: 22px 18px;
+  }
+
+
+  .scanner-area {
+    flex-direction: column;
+
+    gap: 16px;
+
+    padding: 8px 0 20px;
+
+    text-align: center;
+  }
+
+
+  .scanner-text {
+    max-width: 100%;
+  }
+
+
+  .scanner-icon {
+    width: 82px;
+    height: 82px;
+
+    flex-basis: 82px;
+  }
+
+}

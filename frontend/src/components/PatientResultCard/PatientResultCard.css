@@ -1,0 +1,601 @@
+/* =========================================================
+   PATIENT RESULT CARD
+   ========================================================= */
+
+.patient-result-card {
+  width: 100%;
+
+  margin: 0;
+
+  padding: 0;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  border: 1px solid #dbe7ee;
+
+  border-radius: 16px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 3px 12px rgba(32, 76, 105, 0.04);
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.patient-card-main {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 22px;
+
+  padding: 24px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   FOTO PASIEN
+   ========================================================= */
+
+.patient-photo {
+  position: relative;
+
+  width: 118px;
+  height: 138px;
+
+  flex: 0 0 118px;
+
+  overflow: hidden;
+
+  border: 1px solid #d8e5ec;
+
+  border-radius: 13px;
+
+  background: #f3f8fa;
+}
+
+
+.patient-photo img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+
+/* =========================================================
+   FOTO PLACEHOLDER
+   ========================================================= */
+
+.patient-photo-placeholder {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  color: #0e7f96;
+
+  background:
+    linear-gradient(
+      145deg,
+      #edf8fa 0%,
+      #f7fbfc 100%
+    );
+}
+
+
+.patient-photo-placeholder svg {
+  position: absolute;
+
+  top: 25px;
+
+  opacity: 0.55;
+}
+
+
+.patient-photo-placeholder span {
+  position: absolute;
+
+  bottom: 20px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+
+  border-radius: 50%;
+
+  color: #ffffff;
+
+  background: #159caf;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  box-shadow:
+    0 5px 12px rgba(21, 156, 175, 0.18);
+}
+
+
+/* =========================================================
+   MAIN INFO
+   ========================================================= */
+
+.patient-main-info {
+  flex: 1;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   NAME
+   ========================================================= */
+
+.patient-name-row {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding-bottom: 17px;
+
+  border-bottom: 1px solid #edf2f5;
+}
+
+
+.patient-name-row h2 {
+  margin: 0;
+
+  color: #123f69;
+
+  font-size: 18px;
+
+  font-weight: 700;
+
+  line-height: 1.25;
+}
+
+
+/* =========================================================
+   JARI ID
+   ========================================================= */
+
+.patient-jari-id {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  margin-top: 7px;
+
+  color: #1595a8;
+
+  font-size: 9px;
+
+  font-weight: 600;
+}
+
+
+.patient-jari-id svg {
+  flex-shrink: 0;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.patient-status {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  flex-shrink: 0;
+
+  padding: 6px 10px;
+
+  border-radius: 999px;
+
+  font-size: 8px;
+
+  font-weight: 700;
+}
+
+
+.patient-status.active {
+  color: #21855c;
+
+  background: #eaf8f1;
+}
+
+
+.patient-status.inactive {
+  color: #9a5a5a;
+
+  background: #fff0f0;
+}
+
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+
+  flex: 0 0 6px;
+
+  border-radius: 50%;
+}
+
+
+.patient-status.active .status-dot {
+  background: #27ad70;
+}
+
+
+.patient-status.inactive .status-dot {
+  background: #cf6565;
+}
+
+
+/* =========================================================
+   DATA GRID
+   ========================================================= */
+
+.patient-data-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  column-gap: 28px;
+
+  row-gap: 16px;
+
+  padding-top: 18px;
+}
+
+
+/* =========================================================
+   DATA ITEM
+   ========================================================= */
+
+.patient-data-item {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+
+  min-width: 0;
+}
+
+
+.patient-data-label {
+  color: #8999a7;
+
+  font-size: 8px;
+
+  font-weight: 600;
+}
+
+
+.patient-data-value {
+  color: #244b6c;
+
+  font-size: 10px;
+
+  font-weight: 500;
+
+  line-height: 1.45;
+
+  word-break: break-word;
+}
+
+
+/* =========================================================
+   ADDRESS
+   ========================================================= */
+
+.patient-address {
+  grid-column: span 2;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.patient-card-footer {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 18px;
+
+  min-height: 66px;
+
+  padding: 13px 20px;
+
+  box-sizing: border-box;
+
+  border-top: 1px solid #eaf0f3;
+
+  background: #fbfdfe;
+}
+
+
+/* =========================================================
+   FOUND INFO
+   ========================================================= */
+
+.patient-found-info {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  min-width: 0;
+}
+
+
+.patient-found-icon {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+
+  flex: 0 0 32px;
+
+  border-radius: 9px;
+
+  color: #159b6a;
+
+  background: #eaf8f1;
+}
+
+
+.patient-found-info > div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+
+  min-width: 0;
+}
+
+
+.patient-found-info strong {
+  color: #31536d;
+
+  font-size: 8px;
+
+  font-weight: 700;
+}
+
+
+.patient-found-info span {
+  color: #8a9aa7;
+
+  font-size: 7.5px;
+}
+
+
+/* =========================================================
+   DAFTARKAN KUNJUNGAN BUTTON
+   ========================================================= */
+
+.patient-visit-button {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  height: 40px;
+
+  flex-shrink: 0;
+
+  padding: 0 17px;
+
+  border: 0;
+
+  border-radius: 9px;
+
+  color: #ffffff;
+
+  background: #0c5a99;
+
+  font-family: inherit;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 5px 12px rgba(12, 90, 153, 0.14);
+
+  transition:
+    background 0.18s ease,
+    transform 0.15s ease,
+    box-shadow 0.18s ease;
+}
+
+
+.patient-visit-button:hover {
+  background: #084d85;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 7px 16px rgba(12, 90, 153, 0.19);
+}
+
+
+.patient-visit-button:active {
+  transform: translateY(0);
+
+  box-shadow:
+    0 3px 8px rgba(12, 90, 153, 0.12);
+}
+
+
+.patient-visit-button svg {
+  transition:
+    transform 0.18s ease;
+}
+
+
+.patient-visit-button:hover svg {
+  transform: translateX(3px);
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .patient-card-main {
+    gap: 18px;
+
+    padding: 20px;
+  }
+
+
+  .patient-photo {
+    width: 100px;
+    height: 120px;
+
+    flex-basis: 100px;
+  }
+
+
+  .patient-data-grid {
+    column-gap: 18px;
+  }
+
+}
+
+
+/* =========================================================
+   TABLET SMALL
+   ========================================================= */
+
+@media (max-width: 720px) {
+
+  .patient-data-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  .patient-address {
+    grid-column: span 2;
+  }
+
+
+  .patient-card-footer {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .patient-visit-button {
+    width: 100%;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 520px) {
+
+  .patient-card-main {
+    flex-direction: column;
+
+    padding: 18px;
+  }
+
+
+  .patient-photo {
+    width: 105px;
+    height: 120px;
+
+    flex-basis: 120px;
+  }
+
+
+  .patient-name-row {
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+
+  .patient-status {
+    align-self: flex-start;
+  }
+
+
+  .patient-data-grid {
+    grid-template-columns: 1fr;
+
+    row-gap: 13px;
+  }
+
+
+  .patient-address {
+    grid-column: span 1;
+  }
+
+
+  .patient-card-footer {
+    padding: 14px 18px;
+  }
+
+
+  .patient-found-info {
+    align-items: flex-start;
+  }
+
+}

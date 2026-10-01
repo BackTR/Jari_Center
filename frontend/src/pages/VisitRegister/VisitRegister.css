@@ -1,0 +1,580 @@
+/* =========================================================
+   VISIT REGISTER
+   Variabel warna (--navy, --blue, --cyan, --text-soft, --border, dst.)
+   diambil dari src/styles/variables.css (global)
+   ========================================================= */
+
+.visit-panel-hint {
+  margin: 0 0 14px;
+
+  color: var(--text-soft);
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   STEP INDICATOR
+   ========================================================= */
+
+.visit-steps {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-bottom: 20px;
+}
+
+.visit-step {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 8px 14px 8px 8px;
+
+  border-radius: 30px;
+
+  border: 1px solid var(--border);
+
+  background: white;
+
+  color: var(--text-soft);
+
+  font-size: 12px;
+  font-weight: 700;
+
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.visit-step-index {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #eef4f9;
+
+  color: var(--text-soft);
+
+  font-size: 11px;
+  font-weight: 800;
+
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.visit-step.is-current {
+  border-color: #bcdced;
+
+  background: linear-gradient(135deg, #f4fdff, white);
+
+  color: var(--navy);
+}
+
+.visit-step.is-current .visit-step-index {
+  background: linear-gradient(135deg, var(--navy), var(--blue));
+
+  color: white;
+}
+
+.visit-step.is-done {
+  border-color: #cdeee0;
+
+  color: var(--green);
+}
+
+.visit-step.is-done .visit-step-index {
+  background: var(--green-light);
+
+  color: var(--green);
+}
+
+.visit-step-line {
+  width: 28px;
+  height: 1px;
+
+  background: var(--border);
+}
+
+
+/* =========================================================
+   SEARCH ROW
+   ========================================================= */
+
+.visit-search-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  margin: 0 0 16px;
+}
+
+.visit-search-row .dropdown-field {
+  width: 190px;
+  flex-shrink: 0;
+
+  margin-bottom: 0;
+}
+
+.visit-search-row .visit-input {
+  flex: 1;
+  min-width: 0;
+
+  align-self: stretch;
+}
+
+.visit-search-row .jari-primary-btn {
+  height: 44px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 620px) {
+  .visit-search-row {
+    flex-direction: column;
+  }
+
+  .visit-search-row .dropdown-field {
+    width: 100%;
+  }
+
+  .visit-search-row .jari-primary-btn {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   SEARCH RESULTS
+   ========================================================= */
+
+.visit-search-results {
+  list-style: none;
+
+  margin: 16px 0 0;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.visit-search-results li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  padding: 12px 15px;
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  background: #fbfdff;
+
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.visit-search-results li:hover {
+  border-color: #b8dbea;
+
+  box-shadow: 0 7px 17px rgba(8, 76, 125, 0.07);
+
+  transform: translateX(2px);
+}
+
+.visit-search-result-left {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  min-width: 0;
+}
+
+.visit-result-avatar {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color: white;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  background: linear-gradient(135deg, var(--navy), var(--blue), var(--cyan));
+}
+
+.visit-search-result-name {
+  color: var(--navy);
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.visit-search-result-id {
+  margin-top: 2px;
+
+  color: var(--text-soft);
+
+  font-size: 12px;
+}
+
+.visit-select-btn {
+  height: 36px;
+  flex-shrink: 0;
+
+  padding: 0 14px;
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   SELECTED PATIENT BANNER
+   ========================================================= */
+
+.visit-selected-patient {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-bottom: 16px;
+
+  border-color: #a8dff0;
+
+  background: linear-gradient(135deg, #f4fdff, white);
+}
+
+.visit-selected-patient-left {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+
+  min-width: 0;
+}
+
+.visit-selected-avatar {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color: white;
+
+  font-size: 16px;
+  font-weight: 800;
+
+  background: linear-gradient(135deg, var(--navy), var(--blue), var(--cyan));
+
+  box-shadow: 0 6px 16px rgba(6, 59, 120, 0.2);
+}
+
+.visit-selected-patient-name {
+  margin-top: 2px;
+
+  color: var(--navy);
+
+  font-size: 17px;
+  font-weight: 800;
+
+  letter-spacing: -0.3px;
+}
+
+.visit-change-btn {
+  flex-shrink: 0;
+
+  height: 38px;
+
+  padding: 0 16px;
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.visit-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  align-items: start;
+}
+
+@media (max-width: 560px) {
+  .visit-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.visit-submit-btn {
+  width: 100%;
+
+  margin-top: 4px;
+}
+
+@media (min-width: 480px) {
+  .visit-submit-btn {
+    width: auto;
+  }
+}
+
+
+/* =========================================================
+   CUSTOM DROPDOWN
+   ========================================================= */
+
+.dropdown-field {
+  position: relative;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-trigger {
+  width: 100%;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  padding: 0 13px;
+
+  border: 1px solid #d7e7f0;
+  border-radius: 10px;
+
+  background: #f8fbfd;
+
+  color: var(--navy);
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.dropdown-trigger:hover:not(.is-disabled) {
+  border-color: #b8dbea;
+}
+
+.dropdown-trigger.is-open {
+  border-color: var(--cyan);
+
+  background: white;
+
+  box-shadow: 0 0 0 3px rgba(8, 184, 208, 0.08);
+}
+
+.dropdown-trigger.is-disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+.dropdown-trigger-content {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdown-trigger-icon {
+  display: flex;
+  flex-shrink: 0;
+
+  color: var(--blue);
+}
+
+.dropdown-placeholder {
+  color: #9dafbf;
+
+  font-weight: 500;
+}
+
+.dropdown-chevron {
+  display: flex;
+  flex-shrink: 0;
+
+  color: var(--text-soft);
+
+  transition: transform 0.2s ease;
+}
+
+.dropdown-trigger.is-open .dropdown-chevron {
+  transform: rotate(180deg);
+
+  color: var(--blue);
+}
+
+.dropdown-menu {
+  position: absolute;
+  z-index: 30;
+
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+
+  margin: 0;
+  padding: 6px;
+
+  list-style: none;
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  background: white;
+
+  box-shadow: 0 14px 34px rgba(8, 66, 115, 0.14);
+
+  max-height: 240px;
+  overflow-y: auto;
+
+  animation: dropdownFadeIn 0.14s ease;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-option {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 9px 10px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: var(--text);
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+
+  cursor: pointer;
+
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.dropdown-option:hover {
+  background: #eef8fb;
+}
+
+.dropdown-option.is-active {
+  background: linear-gradient(105deg, #e7f6ff 0%, #effcff 65%);
+
+  color: var(--navy);
+}
+
+.dropdown-option-icon {
+  display: flex;
+  flex-shrink: 0;
+
+  color: var(--blue);
+}
+
+.dropdown-option.is-active .dropdown-option-icon {
+  color: var(--navy);
+}
+
+.dropdown-empty {
+  padding: 12px 10px;
+
+  color: var(--text-soft);
+
+  font-size: 12px;
+  text-align: center;
+}
+
+.dropdown-hint {
+  display: block;
+
+  margin-top: 6px;
+
+  color: #a3184a;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.dropdown-menu::-webkit-scrollbar {
+  width: 5px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+  background: #cde3ea;
+  border-radius: 20px;
+}
+
+
+/* =========================================================
+   FIELD ERROR
+   ========================================================= */
+
+.field-error {
+  display: block;
+
+  margin-top: 6px;
+
+  color: #a3184a;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   MONOSPACE (Jari ID, dsb)
+   ========================================================= */
+
+.mono {
+  font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+
+  color: var(--text-soft);
+
+  font-size: 12px;
+  letter-spacing: 0.2px;
+}

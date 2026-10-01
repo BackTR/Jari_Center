@@ -402,6 +402,363 @@ Mencari pasien berdasarkan template sidik jari — dipakai di panel "Identifikas
 
 ---
 
+## 6. Polyclinic
+
+### `GET /polyclinics`
+*(Perlu token)*
+
+Mendapatkan daftar poliklinik aktif untuk fasilitas tertentu.
+
+**Query params:**
+| Param | Wajib | Nilai |
+|---|---|---|
+| `facility_id` | ya | ID fasilitas kesehatan |
+
+**Contoh:** `GET /polyclinics?facility_id=1`
+
+**Response `200`:**
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "facility_id": 1,
+      "name": "Poli Penyakit Dalam",
+      "code": "PD",
+      "is_active": true
+    }
+  ]
+}
+```
+
+**Response `403`** (akses ke faskes lain, bukan `super_admin`):
+```json
+{ "message": "Anda tidak memiliki akses ke faskes ini." }
+```
+
+---
+
+## 7. Queue (Global)
+
+### `GET /queues`
+*(Perlu token)*
+
+Mendapatkan daftar antrean hari ini untuk fasilitas tertentu.
+
+**Query params:**
+| Param | Wajib | Nilai |
+|---|---|---|
+| `facility_id` | ya | ID fasilitas kesehatan |
+| `polyclinic_id` | tidak | filter ke satu poli tertentu |
+| `date` | tidak | format `YYYY-MM-DD`, default hari ini |
+
+**Contoh:** `GET /queues?facility_id=1`
+
+**Response `200`:**
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "queue_number": "P-001",
+      "status": "waiting",
+      "polyclinic": "Poli Penyakit Dalam",
+      "patient": { "jari_id": "JARI-2026-04821793", "name": "Siti Aminah" },
+      "called_at": null
+    }
+  ]
+}
+```
+
+**Response `403`** (akses ke faskes lain, bukan `super_admin`):
+```json
+{ "message": "Anda tidak memiliki akses ke faskes ini." }
+```
+
+---
+
+## 8. Visit (List)
+
+### `GET /visits`
+*(Perlu token)*
+
+Mendapatkan daftar kunjungan untuk fasilitas tertentu dengan pagination.
+
+**Query params:**
+| Param | Wajib | Nilai |
+|---|---|---|
+| `facility_id` | ya | ID fasilitas kesehatan |
+| `date` | tidak | format `YYYY-MM-DD`, default hari ini |
+
+**Contoh:** `GET /visits?facility_id=1&date=2026-09-12`
+
+**Response `200`:**
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "patient": { "id": 1, "jari_id": "JARI-2026-04821793", "name": "Siti Aminah" },
+      "facility_id": 1,
+      "polyclinic_id": null,
+      "polyclinic_name": null,
+      "queue_number": "P-001",
+      "status": "pending_verification",
+      "payment_method": "bpjs",
+      "created_at": "2026-09-12T09:30:00+00:00"
+    }
+  ],
+  "meta": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 20,
+    "total": 1
+  }
+}
+```
+
+**Response `403`** (akses ke faskes lain, bukan `super_admin`):
+```json
+{ "message": "Anda tidak memiliki akses ke faskes ini." }
+```
+
+---
+
+## 9. Admin (Super Admin Only)
+
+Semua endpoint di bawah ini hanya bisa diakses oleh user dengan role `super_admin`.
+
+### `GET /api/admin/dashboard`
+*(Perlu token + role super_admin)*
+
+Statistik global sistem.
+
+**Response `200`:**
+```json
+{
+  "data": {
+    "total_patients": 1234,
+    "total_visits_today": 567,
+    "total_facilities": 12,
+    "total_users": 45,
+    "visits_last_7_days": [
+      { "date": "2026-09-06", "total": 45 },
+      { "date": "2026-09-07", "total": 52 }
+    ],
+    "patients_last_7_days": [
+      { "date": "2026-09-06", "total": 12 },
+      { "date": "2026-09-07", "total": 15 }
+    ]
+  }
+}
+```
+
+---
+
+### `GET /api/admin/facilities`
+*(Perlu token + role super_admin)*
+
+Daftar semua faskes dengan pagination.
+
+**Response `200`:**
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "RSUD Pirngadi",
+      "type": "hospital",
+      "code": "FAC0001",
+      "address": "Jl. Merdeka No. 10",
+      "phone": "021-1234567",
+      "is_active": true,
+      "users_count": 10,
+      "visits_count": 150,
+      "created_at": "2026-09-12T09:24:15+00:00"
+    }
+  ],
+  "meta": {
+    "current_page": 1,
+    "last_page": 2,
+    "per_page": 20,
+    "total": 25
+  }
+}
+```
+
+---
+
+### `POST /api/admin/facilities`
+*(Perlu token + role super_admin)*
+
+Tambah faskes baru.
+
+**Request body:**
+```json
+{
+  "name": "RSUD Baru",
+  "type": "hospital",
+  "code": "FAC0002",
+  "address": "Jl. Baru No. 1",
+  "phone": "021-7654321"
+}
+```
+
+**Response `201`:**
+```json
+{
+  "message": "Faskes berhasil ditambahkan.",
+  "data": { "id": 2, "name": "RSUD Baru", ... }
+}
+```
+
+---
+
+### `PUT /api/admin/facilities/{id}`
+*(Perlu token + role super_admin)*
+
+Edit faskes.
+
+**Request body:**
+```json
+{
+  "name": "RSUD Pirngadi Medan",
+  "is_active": false
+}
+```
+
+**Response `200`:**
+```json
+{
+  "message": "Faskes berhasil diperbarui.",
+  "data": { "id": 1, "name": "RSUD Pirngadi Medan", ... }
+}
+```
+
+---
+
+### `GET /api/admin/users`
+*(Perlu token + role super_admin)*
+
+Daftar semua user dengan pagination.
+
+**Response `200`:**
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "Andi Pratama",
+      "email": "andi@jaricenter.test",
+      "role": "petugas_registrasi",
+      "facility_id": 1,
+      "facility_name": "RSUD Pirngadi",
+      "is_active": true,
+      "created_at": "2026-09-12T09:24:15+00:00"
+    }
+  ],
+  "meta": {
+    "current_page": 1,
+    "last_page": 3,
+    "per_page": 20,
+    "total": 45
+  }
+}
+```
+
+---
+
+### `POST /api/admin/users`
+*(Perlu token + role super_admin)*
+
+Tambah user baru.
+
+**Request body:**
+```json
+{
+  "name": "Budi Santoso",
+  "email": "budi@jaricenter.test",
+  "password": "password123",
+  "role": "petugas_registrasi",
+  "facility_id": 1
+}
+```
+
+**Response `201`:**
+```json
+{
+  "message": "User berhasil ditambahkan.",
+  "data": { "id": 2, "name": "Budi Santoso", ... }
+}
+```
+
+---
+
+### `PUT /api/admin/users/{id}`
+*(Perlu token + role super_admin)*
+
+Edit user.
+
+**Request body:**
+```json
+{
+  "name": "Budi Santoso Updated",
+  "role": "perawat",
+  "is_active": false
+}
+```
+
+**Response `200`:**
+```json
+{
+  "message": "User berhasil diperbarui.",
+  "data": { "id": 2, "name": "Budi Santoso Updated", ... }
+}
+```
+
+---
+
+### `PATCH /api/admin/users/{id}/reset-password`
+*(Perlu token + role super_admin)*
+
+Reset password user.
+
+**Request body:**
+```json
+{
+  "password": "newpassword123"
+}
+```
+
+**Response `200`:**
+```json
+{
+  "message": "Password berhasil direset."
+}
+```
+
+---
+
+### `GET /api/admin/activities`
+*(Perlu token + role super_admin)*
+
+Log aktivitas sistem.
+
+**Response `200`:**
+```json
+{
+  "data": [],
+  "meta": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 20,
+    "total": 0
+  }
+}
+```
+
+---
+
 ## Catatan untuk Frontend
 
 - Semua response sukses dibungkus `{ "data": ... }` (standar Laravel API Resource).

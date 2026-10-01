@@ -6,6 +6,7 @@ use App\Application\Patient\AssignFacilityMedicalRecordService;
 use App\Domain\Visit\Contracts\VisitRepositoryInterface;
 use App\Models\Visit;
 use App\Models\VisitStageLog;
+use Illuminate\Support\Facades\DB;
 
 class RegisterVisitUseCase
 {
@@ -18,33 +19,35 @@ class RegisterVisitUseCase
 
     public function execute(array $data, int $registeredByUserId): Visit
     {
-        $data['registered_by'] = $registeredByUserId;
-        $data['status'] = 'pending_verification';
+        return DB::transaction(function () use ($data, $registeredByUserId) {
+            $data['registered_by'] = $registeredByUserId;
+            $data['status'] = 'pending_verification';
 
-        $visit = $this->visitRepository->create($data);
+            $visit = $this->visitRepository->create($data);
 
-        // Pastikan pasien punya Nomor RM di faskes ini
-        $this->assignFacilityMedicalRecordService->getOrCreate(
-            $visit->patient_id,
-            $visit->facility_id,
-        );
+            // Pastikan pasien punya Nomor RM di faskes ini
+            $this->assignFacilityMedicalRecordService->getOrCreate(
+                $visit->patient_id,
+                $visit->facility_id,
+            );
 
-        // Buat nomor antrean untuk visit ini
-        $this->generateQueueNumberService->createFor(
-            $visit->patient_id,
-            $visit->facility_id,
-            $visit->polyclinic_id,
-            $visit->id,
-        );
+            // Buat nomor antrean untuk visit ini
+            $this->generateQueueNumberService->createFor(
+                $visit->patient_id,
+                $visit->facility_id,
+                $visit->polyclinic_id,
+                $visit->id,
+            );
 
-        VisitStageLog::create([
-            'visit_id' => $visit->id,
-            'changed_by' => $registeredByUserId,
-            'stage' => 'pending_verification',
-            'notes' => 'Kunjungan dibuat, menunggu verifikasi petugas.',
-            'created_at' => now(),
-        ]);
+            VisitStageLog::create([
+                'visit_id' => $visit->id,
+                'changed_by' => $registeredByUserId,
+                'stage' => 'pending_verification',
+                'notes' => 'Kunjungan dibuat, menunggu verifikasi petugas.',
+                'created_at' => now(),
+            ]);
 
-        return $visit->fresh(['stageLogs', 'queue']);
+            return $visit->fresh(['stageLogs', 'queue']);
+        });
     }
 }

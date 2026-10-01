@@ -25,7 +25,7 @@ class EloquentQueueRepository implements QueueRepositoryInterface
     public function listTodayByFacility(int $facilityId, ?int $polyclinicId, string $date)
     {
         return Queue::where('facility_id', $facilityId)
-            ->when($polyclinicId, fn ($query) => $query->where('polyclinic_Id', $polyclinicId))
+            ->when($polyclinicId, fn ($query) => $query->where('polyclinic_id', $polyclinicId))
             ->wheredate('queue_date', $date)
             ->with(['patient:id,jari_id,name', 'polyclinic:id,name,code'])
             ->orderby('queue_number')

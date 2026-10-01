@@ -12,6 +12,7 @@ use App\Http\Resources\VisitResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InvalidArgumentException;
+use App\Models\Visit;
 
 class VisitController extends Controller
 {
@@ -54,7 +55,55 @@ class VisitController extends Controller
         return (new VisitResource($updated))->response();
     }
 
-    public function show(int $visitId): JsonResponse
+    public function index(Request $request): JsonResponse
+    {
+        $request->validate([
+            'facility_id' => ['required', 'exists:facilities,id'],
+            'date' => ['nullable', 'date_format:Y-m-d'],
+        ]);
+
+        $facilityId = (int) $request->query('facility_id');
+        $date = $request->query('date', now()->toDateString());
+
+        // Check facility access
+        if (! $this->canAccessFacility($request, $facilityId)) {
+            return response()->json([
+                'message' => 'Anda tidak memiliki akses ke faskes ini.',
+            ], 403);
+        }
+
+        $visits = Visit::where('facility_id', $facilityId)
+            ->whereDate('created_at', $date)
+            ->with(['patient:id,jari_id,name', 'polyclinic:id,name,code', 'queue'])
+            ->latest()
+            ->paginate(20);
+
+        return response()->json([
+            'data' => $visits->map(fn ($visit) => [
+                'id' => $visit->id,
+                'patient' => [
+                    'id' => $visit->patient->id,
+                    'jari_id' => $visit->patient->jari_id,
+                    'name' => $visit->patient->name,
+                ],
+                'facility_id' => $visit->facility_id,
+                'polyclinic_id' => $visit->polyclinic_id,
+                'polyclinic_name' => $visit->polyclinic?->name,
+                'queue_number' => $visit->queue?->queue_number,
+                'status' => $visit->status,
+                'payment_method' => $visit->payment_method,
+                'created_at' => $visit->created_at->toIso8601String(),
+            ]),
+            'meta' => [
+                'current_page' => $visits->currentPage(),
+                'last_page' => $visits->lastPage(),
+                'per_page' => $visits->perPage(),
+                'total' => $visits->total(),
+            ],
+        ]);
+    }
+
+    public function show(Request $request, int $visitId): JsonResponse
     {
         $visit = $this->visitRepository->findById($visitId);
 
@@ -62,6 +111,20 @@ class VisitController extends Controller
             return response()->json(['message' => 'Kunjungan tidak ditemukan.'], 404);
         }
 
+        // Check facility access
+        if (! $this->canAccessFacility($request, $visit->facility_id)) {
+            return response()->json([
+                'message' => 'Anda tidak memiliki akses ke faskes ini.',
+            ], 403);
+        }
+
         return (new VisitResource($visit))->response();
+    }
+
+    private function canAccessFacility(Request $request, int $facilityId): bool
+    {
+        $user = $request->user();
+
+        return $user->role === 'super_admin' || $user->facility_id === $facilityId;
     }
 }

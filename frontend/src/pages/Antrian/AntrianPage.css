@@ -1,0 +1,912 @@
+.antrian-page {
+  min-height: 100%;
+  padding: 34px 38px 50px;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(34, 197, 238, 0.08),
+      transparent 34%
+    ),
+    #f7fbfe;
+  color: #0f2f55;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.antrian-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.antrian-header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.antrian-header-icon {
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 16px;
+
+  background: #edf5ff;
+  color: #2563eb;
+}
+
+.antrian-header-left h1 {
+  margin: 0;
+
+  font-size: 32px;
+  line-height: 1.1;
+  font-weight: 800;
+
+  color: #092f5f;
+}
+
+.antrian-header-left p {
+  margin: 8px 0 0;
+
+  font-size: 16px;
+  color: #607995;
+}
+
+.antrian-date {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+
+  padding-top: 4px;
+}
+
+.antrian-date span {
+  font-size: 14px;
+  color: #71859e;
+}
+
+.antrian-date strong {
+  font-size: 16px;
+  color: #102f52;
+}
+
+
+/* =========================================================
+   COMMON
+========================================================= */
+
+.section-eyebrow {
+  display: block;
+
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+
+  color: #607995;
+}
+
+
+/* =========================================================
+   CURRENT QUEUE
+========================================================= */
+
+.current-queue-card {
+  overflow: hidden;
+
+  margin-bottom: 28px;
+
+  background: #ffffff;
+
+  border: 1px solid #dce7f0;
+  border-radius: 22px;
+
+  box-shadow:
+    0 8px 25px rgba(15, 47, 85, 0.05);
+}
+
+.current-queue-header {
+  min-height: 108px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 25px 30px;
+
+  border-bottom: 1px solid #e7eef4;
+}
+
+.current-queue-title {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+
+  margin-top: 8px;
+}
+
+.current-queue-title strong {
+  font-size: 28px;
+  font-weight: 800;
+
+  color: #1258a3;
+}
+
+.current-queue-title span {
+  font-size: 18px;
+  font-weight: 700;
+
+  color: #193a61;
+}
+
+.current-queue-header h2 {
+  margin: 8px 0 0;
+
+  font-size: 24px;
+  font-weight: 800;
+
+  color: #102f52;
+}
+
+.current-queue-count {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.current-queue-count strong {
+  font-size: 32px;
+  line-height: 1;
+
+  color: #2563eb;
+}
+
+.current-queue-count span {
+  margin-top: 5px;
+
+  font-size: 14px;
+  color: #71859e;
+}
+
+.current-queue-body {
+  min-height: 245px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 38px;
+}
+
+.current-queue-active {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: 190px 1fr auto auto;
+  align-items: center;
+  gap: 28px;
+
+  padding: 28px 30px;
+
+  border: 1px solid #d9e9f5;
+  border-radius: 18px;
+
+  background: #f7fbff;
+}
+
+.current-queue-number {
+  font-size: 52px;
+  line-height: 1;
+  font-weight: 900;
+
+  letter-spacing: -0.04em;
+
+  color: #1262b3;
+}
+
+.current-queue-patient {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.current-queue-patient strong {
+  font-size: 20px;
+  color: #12375f;
+}
+
+.current-queue-patient span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  font-size: 14px;
+  color: #6d839d;
+}
+
+.current-queue-status {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.current-queue-status span {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+
+  color: #71859e;
+}
+
+.current-queue-status strong {
+  font-size: 15px;
+  color: #14915a;
+}
+
+.current-queue-detail {
+  height: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 0 17px;
+
+  border: 1px solid #cdddea;
+  border-radius: 11px;
+
+  background: #ffffff;
+
+  color: #1557a6;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.current-queue-detail:hover {
+  background: #f0f7ff;
+}
+
+.current-queue-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 20px;
+
+  color: #718198;
+}
+
+.current-queue-empty svg {
+  flex-shrink: 0;
+}
+
+.current-queue-empty div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.current-queue-empty strong {
+  font-size: 17px;
+  color: #334b68;
+}
+
+.current-queue-empty span {
+  font-size: 14px;
+  color: #91a2b8;
+}
+
+
+/* =========================================================
+   LIST CARD
+========================================================= */
+
+.queue-list-card {
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid #dce7f0;
+  border-radius: 22px;
+
+  box-shadow:
+    0 8px 25px rgba(15, 47, 85, 0.05);
+}
+
+.queue-list-header {
+  min-height: 108px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  padding: 25px 30px;
+
+  border-bottom: 1px solid #e7eef4;
+}
+
+.queue-list-header h2 {
+  margin: 7px 0 0;
+
+  font-size: 24px;
+  font-weight: 800;
+
+  color: #102f52;
+}
+
+.queue-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.queue-summary {
+  min-width: 76px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 8px 12px;
+
+  border-radius: 10px;
+
+  background: #f7fafc;
+}
+
+.queue-summary span {
+  font-size: 11px;
+  color: #8193a8;
+}
+
+.queue-summary strong {
+  margin-top: 2px;
+
+  font-size: 17px;
+  color: #163b63;
+}
+
+.queue-refresh-button {
+  height: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 0 17px;
+
+  border: 1px solid #ccd9e5;
+  border-radius: 11px;
+
+  background: #ffffff;
+
+  color: #233f60;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.queue-refresh-button:hover {
+  background: #f6faff;
+}
+
+.queue-refresh-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.queue-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.queue-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 980px;
+}
+
+.queue-table thead {
+  background: #f8fafc;
+}
+
+.queue-table th {
+  padding: 16px 22px;
+
+  border-bottom: 1px solid #e5edf3;
+
+  text-align: left;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  color: #607995;
+  white-space: nowrap;
+}
+
+.queue-table td {
+  padding: 18px 22px;
+
+  border-bottom: 1px solid #edf2f6;
+
+  vertical-align: middle;
+}
+
+.queue-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.queue-table tbody tr:hover {
+  background: #fbfdff;
+}
+
+.queue-row-number {
+  width: 32px;
+  height: 32px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #f1f5f8;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  color: #67809c;
+}
+
+
+/* =========================================================
+   PATIENT
+========================================================= */
+
+.queue-patient {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  min-width: 200px;
+}
+
+.queue-avatar {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #edf4ff;
+
+  color: #2563eb;
+
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.queue-patient-info {
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.queue-patient-info strong {
+  font-size: 15px;
+  color: #17395e;
+}
+
+.queue-patient-info span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  font-size: 12px;
+
+  color: #8496aa;
+}
+
+
+/* =========================================================
+   POLYCLINIC
+========================================================= */
+
+.queue-poly {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  white-space: nowrap;
+}
+
+.queue-poly-icon {
+  min-width: 36px;
+  height: 36px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #eef5ff;
+
+  color: #2563eb;
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.queue-poly > span:last-child {
+  font-size: 14px;
+  color: #274667;
+}
+
+
+/* =========================================================
+   QUEUE NUMBER
+========================================================= */
+
+.queue-number {
+  font-size: 19px;
+
+  color: #123d69;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.queue-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 7px 11px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.queue-status-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.queue-status--waiting {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.queue-status--called {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.queue-status--in_service {
+  background: #ecfdf5;
+  color: #15803d;
+}
+
+.queue-status--done {
+  background: #f0eafe;
+  color: #6941c6;
+}
+
+.queue-status--cancelled,
+.queue-status--skipped {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+
+/* =========================================================
+   CALLED
+========================================================= */
+
+.queue-called-time {
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #536d88;
+}
+
+.queue-not-called {
+  color: #9aaabd;
+}
+
+
+/* =========================================================
+   DETAIL BUTTON
+========================================================= */
+
+.queue-detail-button {
+  height: 38px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 0 13px;
+
+  border: 1px solid #cdddea;
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #1e5bb1;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.queue-detail-button:hover {
+  background: #f3f8ff;
+}
+
+.queue-no-detail {
+  color: #9aaabd;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.queue-empty-cell {
+  padding: 0 !important;
+}
+
+.queue-empty {
+  min-height: 270px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  color: #94a3b8;
+}
+
+.queue-empty svg {
+  margin-bottom: 7px;
+}
+
+.queue-empty strong {
+  font-size: 17px;
+  color: #415b77;
+}
+
+.queue-empty span {
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.queue-list-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 17px 24px;
+
+  border-top: 1px solid #e8eef3;
+
+  background: #fbfdff;
+
+  font-size: 12px;
+  color: #8294a8;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.antrian-loading {
+  min-height: 400px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  color: #71859e;
+}
+
+.antrian-loading strong {
+  font-size: 16px;
+  color: #294a6c;
+}
+
+.antrian-loading span {
+  font-size: 13px;
+}
+
+.antrian-loading-spinner {
+  width: 34px;
+  height: 34px;
+
+  margin-bottom: 8px;
+
+  border: 3px solid #dce8f2;
+  border-top-color: #2563eb;
+
+  border-radius: 50%;
+
+  animation: antrian-spin 0.8s linear infinite;
+}
+
+@keyframes antrian-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.antrian-error {
+  min-height: 300px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 20px;
+}
+
+.antrian-error > div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.antrian-error strong {
+  color: #a32d2d;
+}
+
+.antrian-error span {
+  font-size: 14px;
+  color: #75869a;
+}
+
+.antrian-error button {
+  height: 40px;
+
+  padding: 0 16px;
+
+  border: 0;
+  border-radius: 9px;
+
+  background: #2563eb;
+
+  color: #ffffff;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+  .antrian-page {
+    padding: 25px 22px 40px;
+  }
+
+  .current-queue-active {
+    grid-template-columns: 150px 1fr;
+  }
+
+  .current-queue-status {
+    grid-column: 2;
+  }
+
+  .current-queue-detail {
+    grid-column: 2;
+    width: fit-content;
+  }
+
+  .queue-header-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
+
+
+@media (max-width: 760px) {
+  .antrian-page-header {
+    flex-direction: column;
+  }
+
+  .antrian-date {
+    align-items: flex-start;
+  }
+
+  .current-queue-header {
+    padding: 20px;
+  }
+
+  .current-queue-body {
+    padding: 20px;
+  }
+
+  .current-queue-active {
+    grid-template-columns: 1fr;
+  }
+
+  .current-queue-status,
+  .current-queue-detail {
+    grid-column: auto;
+  }
+
+  .queue-list-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .queue-header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .queue-list-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}

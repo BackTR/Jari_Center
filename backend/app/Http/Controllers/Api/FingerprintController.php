@@ -27,6 +27,17 @@ class FingerprintController extends Controller
             return response()->json(['message' => 'Pasien tidak ditemukan.'], 404);
         }
 
+        // Check if user has access to this patient's facility
+        $hasAccess = $patient->facilityMappings()
+            ->where('facility_id', $request->user()->facility_id)
+            ->exists();
+
+        if (! $hasAccess && $request->user()->role !== 'super_admin') {
+            return response()->json([
+                'message' => 'Anda tidak memiliki akses ke pasien ini.',
+            ], 403);
+        }
+
         try {
             $updated = $this->enrollFingerprintUseCase->execute(
                 $patient,
@@ -52,6 +63,19 @@ class FingerprintController extends Controller
             return response()->json([
                 'matched' => false,
                 'message' => 'Sidik jari tidak cocok dengan data pasien manapun.',
+                'data' => null,
+            ], 200);
+        }
+
+        // Check if user has access to this patient's facility
+        $hasAccess = $patient->facilityMappings()
+            ->where('facility_id', $request->user()->facility_id)
+            ->exists();
+
+        if (! $hasAccess && $request->user()->role !== 'super_admin') {
+            return response()->json([
+                'matched' => false,
+                'message' => 'Anda tidak memiliki akses ke data pasien ini.',
                 'data' => null,
             ], 200);
         }

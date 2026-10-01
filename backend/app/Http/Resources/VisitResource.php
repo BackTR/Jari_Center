@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use App\Models\PatientFacilityMapping;
-use Faker\Provider\Medical;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -31,7 +30,9 @@ class VisitResource extends JsonResource
                 ] : null;
                 }),
             'facility_id' => $this->facility_id,
+            'facility_name' => $this->facility?->name,
             'polyclinic_id' => $this->polyclinic_id,
+            'polyclinic_name' => $this->polyclinic?->name,
             'identification_method' => $this->identification_method,
             'payment_method' => $this->payment_method,
             'bpjs_number' => $this->bpjs_number,
