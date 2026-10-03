@@ -1,124 +1,29 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { identifyPatient } from '../../api/patients.js'
+import {
+  identifyPatient,
+  matchFingerprint,
+} from '../../api/patients.js'
 import { extractErrorMessage } from '../../utils/errors.js'
 import PatientResultCard from '../../components/PatientResultCard/PatientResultCard.jsx'
+import {
+  FingerprintIcon,
+  SearchIcon,
+} from '../../components/icons.jsx'
 import './PatientIdentify.css'
-
-
-/* =========================================================
-   ICONS
-   ========================================================= */
-
-function FingerprintIcon({ size = 20 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 11.5a2.5 2.5 0 0 1 2.5 2.5c0 3.5-.7 6.2-2 8" />
-      <path d="M9.5 14c0-1.4 1.1-2.5 2.5-2.5" />
-      <path d="M7 14c0-2.8 2.2-5 5-5s5 2.2 5 5c0 2.7-.4 5.2-1.2 7" />
-      <path d="M4.8 14c0-4 3.2-7.2 7.2-7.2s7.2 3.2 7.2 7.2c0 1.8-.2 3.7-.7 5.3" />
-      <path d="M6.2 19.5c.5-1.8.8-3.7.8-5.5" />
-      <path d="M9 21c.8-2.1 1.2-4.4 1.2-7" />
-    </svg>
-  )
-}
-
-
-function FaceIcon({ size = 20 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M8 3H5a2 2 0 0 0-2 2v3" />
-      <path d="M16 3h3a2 2 0 0 1 2 2v3" />
-      <path d="M8 21H5a2 2 0 0 1-2-2v-3" />
-      <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
-      <circle cx="9" cy="10" r="1" fill="currentColor" />
-      <circle cx="15" cy="10" r="1" fill="currentColor" />
-      <path d="M8.5 15c1.8 1.4 5.2 1.4 7 0" />
-    </svg>
-  )
-}
-
-
-function QrIcon({ size = 20 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect x="4" y="4" width="6" height="6" rx="1" />
-      <rect x="14" y="4" width="6" height="6" rx="1" />
-      <rect x="4" y="14" width="6" height="6" rx="1" />
-      <path d="M14 14h2v2h-2z" />
-      <path d="M18 14h2v2h-2z" />
-      <path d="M14 18h2v2h-2z" />
-      <path d="M18 18h2" />
-    </svg>
-  )
-}
-
-
-function SearchIcon({ size = 20 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="10.8" cy="10.8" r="6.5" />
-      <path d="m16 16 5 5" />
-    </svg>
-  )
-}
 
 
 /* =========================================================
    METODE IDENTIFIKASI
    ========================================================= */
 
+// Hanya ada endpoint untuk sidik jari. Face & QR dihapus: panelnya
+// dekorasi, tidak pernah memanggil backend apa pun.
 const METHOD_OPTIONS = [
   {
     value: 'fingerprint',
     label: 'Sidik Jari',
     icon: FingerprintIcon,
-  },
-  {
-    value: 'face',
-    label: 'Face',
-    icon: FaceIcon,
-  },
-  {
-    value: 'qr',
-    label: 'QR Code',
-    icon: QrIcon,
   },
   {
     value: 'search',
@@ -203,6 +108,35 @@ export default function PatientIdentify() {
       )
 
       setResults(data.data || [])
+      setSearched(true)
+    } catch (err) {
+      setError(extractErrorMessage(err))
+      setResults(null)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+
+  /* =======================================================
+     PINDAI SIDIK JARI
+     ======================================================= */
+
+  async function handleFingerprintScan(e) {
+    e.preventDefault()
+
+    if (value.trim().length < 2) {
+      setError('Tempel template sidik jari hasil scan.')
+      return
+    }
+
+    setError('')
+    setLoading(true)
+
+    try {
+      const { data } = await matchFingerprint(value.trim())
+
+      setResults(data.matched ? [data.data] : [])
       setSearched(true)
     } catch (err) {
       setError(extractErrorMessage(err))
@@ -334,101 +268,90 @@ export default function PatientIdentify() {
 
             </div>
 
-            <div className="method-info">
+            <form
+              onSubmit={handleFingerprintScan}
+              className="identify-form"
+            >
 
-              <span className="method-status-dot" />
+              <div className="identify-field">
 
-              <span>
-                Menunggu scanner sidik jari
-              </span>
+                <label htmlFor="fp-template">
+                  Template sidik jari
+                </label>
 
-            </div>
+                <div className="identify-input">
 
-          </div>
-        )}
+                  <FingerprintIcon size={19} />
 
+                  <input
+                    id="fp-template"
+                    type="text"
+                    value={value}
+                    onChange={(e) =>
+                      setValue(e.target.value)
+                    }
+                    placeholder="Tempel hasil scan scanner di sini"
+                    autoComplete="off"
+                  />
 
-        {/* =================================================
-            FACE
-            ================================================= */}
-
-        {method === 'face' && (
-
-          <div className="identify-method-content">
-
-            <div className="scanner-area">
-
-              <div className="scanner-icon face">
-                <FaceIcon size={56} />
-              </div>
-
-              <div className="scanner-text">
-
-                <h2>
-                  Identifikasi dengan Face
-                </h2>
-
-                <p>
-                  Arahkan wajah pasien ke kamera
-                  untuk melakukan identifikasi.
-                </p>
+                </div>
 
               </div>
 
-            </div>
+              <div className="identify-button-field">
 
-            <div className="method-info">
+                <button
+                  type="submit"
+                  className="jari-primary-btn identify-submit"
+                  disabled={loading}
+                >
 
-              <span className="method-status-dot" />
+                  <FingerprintIcon size={18} />
 
-              <span>
-                Kamera siap digunakan
-              </span>
+                  <span>
+                    {loading
+                      ? 'Memindai...'
+                      : 'Identifikasi'
+                    }
+                  </span>
 
-            </div>
-
-          </div>
-        )}
-
-
-        {/* =================================================
-            QR CODE
-            ================================================= */}
-
-        {method === 'qr' && (
-
-          <div className="identify-method-content">
-
-            <div className="scanner-area">
-
-              <div className="scanner-icon qr">
-                <QrIcon size={56} />
-              </div>
-
-              <div className="scanner-text">
-
-                <h2>
-                  Identifikasi dengan QR Code
-                </h2>
-
-                <p>
-                  Arahkan QR Code pasien ke kamera
-                  untuk mencari data pasien.
-                </p>
+                </button>
 
               </div>
 
-            </div>
+            </form>
 
-            <div className="method-info">
+            {error && (
+              <div className="alert alert-error">
+                {error}
+              </div>
+            )}
 
-              <span className="method-status-dot" />
+            {searched && !error && (
+              results.length === 0 ? (
 
-              <span>
-                Scanner QR Code siap digunakan
-              </span>
+                <div className="alert alert-empty">
+                  Sidik jari tidak cocok dengan data pasien.
+                </div>
 
-            </div>
+              ) : (
+
+                <div className="identify-results">
+
+                  {results.map((patient) => (
+
+                    <PatientResultCard
+                      key={patient.id}
+                      patient={patient}
+                      onStartVisit={handleStartVisit}
+                    />
+
+                  ))}
+
+                </div>
+
+              )
+            )}
 
           </div>
         )}

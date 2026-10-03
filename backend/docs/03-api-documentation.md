@@ -196,7 +196,7 @@ Kalau `payment_method = bpjs`, field `bpjs_number` **wajib** diisi (validasi oto
     "facility_id": 1,
     "polyclinic_id": null,
     "medical_record_number": "RM000000001",
-    "queue": { "queue_number": "P-001", "status": "waiting", "queue_date": "2026-09-12" },
+    "queue": { "queue_number": "P-001", "queue_date": "2026-09-12" },
     "identification_method": "nik",
     "payment_method": "bpjs",
     "bpjs_number": "0001234567890",
@@ -321,6 +321,8 @@ Ringkasan kunjungan per faskes untuk 1 hari tertentu. Petugas hanya bisa akses d
 
 Daftar antrean hari ini di faskes tersebut, urut berdasarkan nomor antrean. Otorisasi sama seperti endpoint dashboard di atas (hanya faskes sendiri, kecuali `super_admin`).
 
+> Field status bernama `visit_status`, bukan `status`. Antrean tidak punya tahap sendiri — tahap antrean **adalah** tahap kunjungan (`visits.status`). Client cukup baca satu sumber itu.
+
 **Query params:**
 | Param | Wajib | Nilai |
 |---|---|---|
@@ -333,11 +335,11 @@ Daftar antrean hari ini di faskes tersebut, urut berdasarkan nomor antrean. Otor
   "data": [
     {
       "id": 1,
+      "visit_id": 1,
       "queue_number": "P-001",
-      "status": "waiting",
+      "visit_status": "pending_verification",
       "polyclinic": "Poli Penyakit Dalam",
-      "patient": { "jari_id": "JARI-2026-04821793", "name": "Siti Aminah" },
-      "called_at": null
+      "patient": { "jari_id": "JARI-2026-04821793", "name": "Siti Aminah" }
     }
   ]
 }
@@ -438,46 +440,7 @@ Mendapatkan daftar poliklinik aktif untuk fasilitas tertentu.
 
 ---
 
-## 7. Queue (Global)
-
-### `GET /queues`
-*(Perlu token)*
-
-Mendapatkan daftar antrean hari ini untuk fasilitas tertentu.
-
-**Query params:**
-| Param | Wajib | Nilai |
-|---|---|---|
-| `facility_id` | ya | ID fasilitas kesehatan |
-| `polyclinic_id` | tidak | filter ke satu poli tertentu |
-| `date` | tidak | format `YYYY-MM-DD`, default hari ini |
-
-**Contoh:** `GET /queues?facility_id=1`
-
-**Response `200`:**
-```json
-{
-  "data": [
-    {
-      "id": 1,
-      "queue_number": "P-001",
-      "status": "waiting",
-      "polyclinic": "Poli Penyakit Dalam",
-      "patient": { "jari_id": "JARI-2026-04821793", "name": "Siti Aminah" },
-      "called_at": null
-    }
-  ]
-}
-```
-
-**Response `403`** (akses ke faskes lain, bukan `super_admin`):
-```json
-{ "message": "Anda tidak memiliki akses ke faskes ini." }
-```
-
----
-
-## 8. Visit (List)
+## 7. Visit (List)
 
 ### `GET /visits`
 *(Perlu token)*
@@ -524,7 +487,7 @@ Mendapatkan daftar kunjungan untuk fasilitas tertentu dengan pagination.
 
 ---
 
-## 9. Admin (Super Admin Only)
+## 8. Admin (Super Admin Only)
 
 Semua endpoint di bawah ini hanya bisa diakses oleh user dengan role `super_admin`.
 
@@ -739,38 +702,24 @@ Reset password user.
 
 ---
 
-### `GET /api/admin/activities`
-*(Perlu token + role super_admin)*
-
-Log aktivitas sistem.
-
-**Response `200`:**
-```json
-{
-  "data": [],
-  "meta": {
-    "current_page": 1,
-    "last_page": 1,
-    "per_page": 20,
-    "total": 0
-  }
-}
-```
-
----
-
 ## Catatan untuk Frontend
 
 - Semua response sukses dibungkus `{ "data": ... }` (standar Laravel API Resource).
 - Field tanggal (`created_at`, `changed_at`, dll) format ISO 8601 (`2026-09-12T09:30:00+00:00`) — parse dengan library tanggal standar (`dayjs`, `date-fns`, dll), jangan manual string split.
 - `jari_id` **selalu** di-generate backend. Frontend tidak pernah mengirim atau mengedit field ini.
-- Kalau dapat `401` di endpoint manapun (selain `/login`), berarti token expired/invalid — arahkan user ke halaman login lagi.
+- Kalau dapat `401` di endpoint manapun (selain `/login`), berarti token expired/invalid — arahkan user ke halaman login lagi. Token berlaku 12 jam.
+- `POST /login` dibatasi 5 percobaan per menit per IP. KelLebihannya dapat `429`.
+- Endpoint admin (`/admin/*`) hanya untuk `super_admin`; selain itu dapat `403`.
 
 ## Status MVP
 
-Semua modul inti dari brief sudah tersedia: Auth, Patient Identity, Jari ID Generator, Patient Facility Mapping (Nomor RM), Queue, Visit Registration dengan stage tracking, Dashboard Faskes, dan Fingerprint Simulation.
+Semua modul inti dari brief sudah tersedia: Auth, Patient Identity, Jari ID Generator, Patient Facility Mapping (Nomor RM), Queue, Visit Registration dengan stage tracking, Dashboard Faskes, Fingerprint Simulation, dan CRUD faskes/user.
 
-**Belum tersedia (di luar scope MVP saat ini, menyusul di fase berikutnya):**
+Endpoint yang sengaja dihapus: `/admin/activities` (tidak ada tabel audit) dan `/patients/{id}/profile` (tabel `patient_profiles` tidak pernah dipakai).
+
+**Belum tersedia (di luar scope MVP, tidak dikerjakan kecuali ada permintaan):**
 - Integrasi SATUSEHAT (OAuth + FHIR Client + IHS Patient ID)
 - Rekam medis penuh, resep, hasil lab detail
 - Mode IGD (alur darurat terpisah)
+- Log aktivitas (butuh tabel audit)
+- RBAC granular per role — selain `super_admin`, semua role non-admin punya hak akses API yang sama dan hanya dibatasi cakupan faskes

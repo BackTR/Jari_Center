@@ -41,4 +41,34 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Facility::class);
     }
+
+    /**
+     * Super admin unrestricted; selain itu hanya faskes sendiri.
+     * Satu-satunya definisi aturan ini — jangan copy-paste per controller.
+     */
+    public function canAccessFacility(int $facilityId): bool
+    {
+        return $this->role === 'super_admin' || $this->facility_id === $facilityId;
+    }
+
+    /**
+     * Satu-satunya definisi "apakah pengguna ini boleh melihat pasien ini".
+     * Dipakai oleh pencarian pasien DAN pencocokan sidik jari — kalau aturan
+     * ini di-copy-paste, keduanya bisa berbeda diam-diam.
+     */
+    public function canReachPatient(Patient $patient): bool
+    {
+        if ($this->role === 'super_admin') {
+            return true;
+        }
+
+        if ($this->facility_id === null) {
+            return false;
+        }
+
+        return Patient::query()
+            ->whereKey($patient->getKey())
+            ->linkedToFacility($this->facility_id)
+            ->exists();
+    }
 }

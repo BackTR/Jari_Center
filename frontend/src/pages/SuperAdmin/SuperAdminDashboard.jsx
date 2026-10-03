@@ -4,56 +4,8 @@ import { extractErrorMessage } from '../../utils/errors.js'
 import StatCard from '../../components/StatCard/StatCard.jsx'
 import DataTable from '../../components/DataTable/DataTable.jsx'
 import api from '../../api/axios'
+import { Icon } from '../../components/icons.jsx'
 import './SuperAdminDashboard.css'
-
-const Icon = ({ name, size = 24 }) => {
-  const icons = {
-    users: (
-      <>
-        <circle cx="9" cy="8" r="3" />
-        <path d="M3.5 20c.6-3.3 2.5-5.2 5.5-5.2s4.9 1.9 5.5 5.2" />
-        <path d="M16 11a3 3 0 1 0 0-6" />
-        <path d="M17 15c2.1.3 3.4 1.8 3.8 4" />
-      </>
-    ),
-    calendar: (
-      <>
-        <rect x="4" y="5" width="16" height="15" rx="2" />
-        <path d="M8 3v4" />
-        <path d="M16 3v4" />
-        <path d="M4 10h16" />
-      </>
-    ),
-    hospital: (
-      <>
-        <path d="M4 21V6h16v15" />
-        <path d="M8 6V3h8v3" />
-        <path d="M9 10h6" />
-        <path d="M12 7v6" />
-      </>
-    ),
-    activity: (
-      <>
-        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-      </>
-    ),
-  }
-
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      {icons[name]}
-    </svg>
-  )
-}
 
 export default function SuperAdminDashboard() {
   const [stats, setStats] = useState(null)
@@ -61,6 +13,10 @@ export default function SuperAdminDashboard() {
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [notice, setNotice] = useState('')
+  const [panel, setPanel] = useState(null)
+  const [form, setForm] = useState({})
+  const [saving, setSaving] = useState(false)
 
   const loadData = async () => {
     try {
@@ -85,6 +41,68 @@ export default function SuperAdminDashboard() {
   useEffect(() => {
     loadData()
   }, [])
+
+  const openPanel = (kind, row) => {
+    setNotice('')
+    setForm(
+      kind === 'facility'
+        ? { type: 'clinic', ...(row ?? {}) }
+        : { role: 'petugas_registrasi', is_active: true, ...(row ?? {}) },
+    )
+    setPanel({ kind, row })
+  }
+
+  const submitPanel = async (e) => {
+    e.preventDefault()
+    setSaving(true)
+    setError('')
+
+    const isFacility = panel.kind === 'facility'
+    const isEdit = Boolean(panel.row)
+
+    const payload = { ...form }
+
+    // Select kosong kirim "", yang gagal jadi integer di kolom FK.
+    if (!payload.facility_id) delete payload.facility_id
+
+    if (isEdit) {
+      delete payload.id
+      delete payload.users_count
+      delete payload.visits_count
+      delete payload.created_at
+      delete payload.facility_name
+    }
+
+    try {
+      const { data } = await api({
+        method: isEdit ? 'put' : 'post',
+        url: isFacility
+          ? `/admin/facilities${isEdit ? `/${panel.row.id}` : ''}`
+          : `/admin/users${isEdit ? `/${panel.row.id}` : ''}`,
+        data: payload,
+      })
+
+      setNotice(data.message)
+      setPanel(null)
+      await loadData()
+    } catch (err) {
+      setError(extractErrorMessage(err))
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const resetPassword = async (row) => {
+    const password = window.prompt(`Password baru untuk ${row.name} (min. 8 karakter):`)
+    if (!password) return
+
+    try {
+      const { data } = await api.patch(`/admin/users/${row.id}/reset-password`, { password })
+      setNotice(data.message)
+    } catch (err) {
+      setError(extractErrorMessage(err))
+    }
+  }
 
   const facilityColumns = [
     { key: 'name', label: 'Nama Faskes' },
@@ -119,6 +137,15 @@ export default function SuperAdminDashboard() {
     },
   ]
 
+  const facilityActions = [
+    { label: 'Edit', onClick: (row) => openPanel('facility', row) },
+  ]
+
+  const userActions = [
+    { label: 'Edit', onClick: (row) => openPanel('user', row) },
+    { label: 'Reset Password', type: 'secondary', onClick: resetPassword },
+  ]
+
   if (loading) {
     return (
       <div className="superadmin-page">
@@ -130,7 +157,7 @@ export default function SuperAdminDashboard() {
     )
   }
 
-  if (error) {
+  if (error && !panel) {
     return (
       <div className="superadmin-page">
         <div className="superadmin-error">
@@ -142,6 +169,16 @@ export default function SuperAdminDashboard() {
     )
   }
 
+  const isFacilityPanel = panel?.kind === 'facility'
+  const field = (key) => ({
+    value: form[key] ?? '',
+    onChange: (e) =>
+      setForm((prev) => ({
+        ...prev,
+        [key]: e.target.type === 'checkbox' ? e.target.checked : e.target.value,
+      })),
+  })
+
   return (
     <div className="superadmin-page">
       <div className="superadmin-header">
@@ -150,6 +187,9 @@ export default function SuperAdminDashboard() {
           <p>Monitoring dan manajemen sistem Jari Center</p>
         </div>
       </div>
+
+      {notice && <div className="superadmin-notice">{notice}</div>}
+      {error && panel && <div className="superadmin-error superadmin-error--inline">{error}</div>}
 
       {stats && (
         <div className="superadmin-stats">
@@ -184,17 +224,112 @@ export default function SuperAdminDashboard() {
         <div className="superadmin-card">
           <div className="superadmin-card-header">
             <h2>Daftar Faskes</h2>
+            <button
+              className="superadmin-btn superadmin-btn--primary"
+              onClick={() => openPanel('facility')}
+            >
+              Tambah Faskes
+            </button>
           </div>
-          <DataTable columns={facilityColumns} data={facilities} />
+          <DataTable
+            columns={facilityColumns}
+            data={facilities}
+            actions={facilityActions}
+          />
         </div>
 
         <div className="superadmin-card">
           <div className="superadmin-card-header">
             <h2>Daftar User</h2>
+            <button
+              className="superadmin-btn superadmin-btn--primary"
+              onClick={() => openPanel('user')}
+            >
+              Tambah User
+            </button>
           </div>
-          <DataTable columns={userColumns} data={users} />
+          <DataTable columns={userColumns} data={users} actions={userActions} />
         </div>
       </div>
+
+      {panel && (
+        <div className="superadmin-modal-backdrop">
+          <form className="superadmin-modal" onSubmit={submitPanel}>
+            <h2>
+              {isFacilityPanel ? 'Faskes' : 'User'}{' '}
+              {panel.row ? '— Edit' : '— Tambah'}
+            </h2>
+
+            {isFacilityPanel ? (
+              <>
+                <label>Nama<input required {...field('name')} /></label>
+                <label>
+                  Tipe
+                  <select {...field('type')}>
+                    {['hospital', 'clinic', 'puskesmas'].map((t) => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>Kode<input required {...field('code')} /></label>
+                <label>Alamat<input {...field('address')} /></label>
+                <label>Telepon<input {...field('phone')} /></label>
+                <label className="superadmin-checkbox">
+                  <input type="checkbox" {...field('is_active')} /> Aktif
+                </label>
+              </>
+            ) : (
+              <>
+                <label>Nama<input required {...field('name')} /></label>
+                <label>Email<input type="email" required {...field('email')} /></label>
+                {!panel.row && (
+                  <label>
+                    Password
+                    <input type="password" required minLength={8} {...field('password')} />
+                  </label>
+                )}
+                <label>
+                  Role
+                  <select {...field('role')}>
+                    {['super_admin', 'facility_admin', 'petugas_registrasi', 'dokter'].map((r) => (
+                      <option key={r} value={r}>{r}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Faskes
+                  <select {...field('facility_id')}>
+                    <option value="">— Tidak ada —</option>
+                    {facilities.map((f) => (
+                      <option key={f.id} value={f.id}>{f.name}</option>
+                    ))}
+                  </select>
+                </label>
+                <label className="superadmin-checkbox">
+                  <input type="checkbox" {...field('is_active')} /> Aktif
+                </label>
+              </>
+            )}
+
+            <div className="superadmin-modal-actions">
+              <button
+                type="button"
+                className="superadmin-btn superadmin-btn--ghost"
+                onClick={() => setPanel(null)}
+              >
+                Batal
+              </button>
+              <button
+                type="submit"
+                disabled={saving}
+                className="superadmin-btn superadmin-btn--primary"
+              >
+                {saving ? 'Menyimpan...' : 'Simpan'}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   )
 }

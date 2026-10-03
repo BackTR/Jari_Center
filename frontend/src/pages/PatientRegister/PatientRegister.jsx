@@ -1,10 +1,21 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { createPatient } from '../../api/patients.js'
+import {
+  createPatient,
+  enrollFingerprint,
+} from '../../api/patients.js'
 import {
   extractErrorMessage,
   extractFieldErrors,
 } from '../../utils/errors.js'
+import {
+  ArrowRightIcon,
+  CheckIcon,
+  FingerprintIcon,
+  PhoneIcon,
+  ShieldIcon,
+  UserIcon,
+} from '../../components/icons.jsx'
 import './PatientRegister.css'
 
 const initialForm = {
@@ -16,129 +27,6 @@ const initialForm = {
   phone: '',
   insurance_provider: '',
   insurance_number: '',
-}
-
-
-/* =========================================================
-   ICONS
-   ========================================================= */
-
-function UserIcon({ size = 18 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="8" r="4" />
-      <path d="M4 21c.8-4 3.4-6 8-6s7.2 2 8 6" />
-    </svg>
-  )
-}
-
-
-function ContactIcon({ size = 18 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 4h3l2 5-2 1.5c1 2 2.5 3.5 4.5 4.5L14 13l5 2v3c0 1.1-.9 2-2 2C10.4 20 4 13.6 4 7c0-1.7.4-3 1-3Z" />
-    </svg>
-  )
-}
-
-
-function ShieldIcon({ size = 18 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 3 20 6v5c0 5-3.2 8.4-8 10-4.8-1.6-8-5-8-10V6l8-3Z" />
-      <path d="m9 12 2 2 4-4" />
-    </svg>
-  )
-}
-
-
-function FingerprintIcon({ size = 48 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 48 48"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M24 7c-8 0-14 5.8-14 14" />
-      <path d="M24 12c-5.2 0-9 3.7-9 9" />
-      <path d="M24 17c-2.4 0-4 1.7-4 4 0 7.5-1.5 12.7-4.7 16" />
-      <path d="M24 22c0 6.4-.7 12.4-4.2 17.3" />
-      <path d="M29 38.5c2.8-4.5 4-9.5 4-16.5 0-5-3.8-9-9-9" />
-      <path d="M34 37c2.5-4.7 3.5-9.7 3.5-15.5C37.5 13.5 31.6 7 24 7" />
-      <path d="M29 43c4-5.5 5.8-12.5 5.8-20" />
-      <path d="M13 31c.8 5 3.1 8.7 6.7 11.2" />
-      <path d="M9 24c0 2.2.2 4.2.7 6" />
-    </svg>
-  )
-}
-
-
-function CheckIcon({ size = 18 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m5 12 4 4L19 6" />
-    </svg>
-  )
-}
-
-
-function ArrowRightIcon({ size = 17 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h13" />
-      <path d="m13 6 6 6-6 6" />
-    </svg>
-  )
 }
 
 
@@ -164,6 +52,8 @@ export default function PatientRegister() {
 
   const [scanning, setScanning] = useState(false)
 
+  const [fingerprintTemplate, setFingerprintTemplate] = useState(null)
+
 
   function update(key, value) {
     setForm((prev) => ({
@@ -176,8 +66,11 @@ export default function PatientRegister() {
   /* =======================================================
      SIMULASI SCAN SIDIK JARI
 
-     Nanti bagian ini bisa diganti dengan API/hardware
-     fingerprint scanner yang sebenarnya.
+     Template di-enroll setelah pasien dibuat, karena endpoint
+     enroll butuh patient_id yang belum ada saat scan.
+
+     ponytail: template ini string buatan, bukan sensor sungguhan.
+     Ganti dengan output scanner saat integrasi hardware.
      ======================================================= */
 
   function handleFingerprintScan() {
@@ -188,6 +81,9 @@ export default function PatientRegister() {
     setTimeout(() => {
       setScanning(false)
       setFingerprintStatus('success')
+      setFingerprintTemplate(
+        `FP-${form.nik || form.name || 'anon'}-${Date.now()}`
+      )
     }, 1800)
   }
 
@@ -199,7 +95,7 @@ export default function PatientRegister() {
     setFieldErrors({})
     setCreated(null)
 
-    if (fingerprintStatus !== 'success') {
+    if (fingerprintStatus !== 'success' || !fingerprintTemplate) {
       setError(
         'Silakan daftarkan sidik jari pasien terlebih dahulu.'
       )
@@ -223,6 +119,18 @@ export default function PatientRegister() {
       setForm(initialForm)
 
       setFingerprintStatus('waiting')
+      setFingerprintTemplate(null)
+
+      // Pasien sudah ada;Enrollment gagal tidak boleh membatalkan
+      // pendaftaran pasien, jadi simmer error di layar.
+      try {
+        await enrollFingerprint(data.data.id, fingerprintTemplate)
+      } catch (fpErr) {
+        setError(
+          'Pasien tersimpan, tetapi sidik jari gagal: ' +
+            extractErrorMessage(fpErr)
+        )
+      }
 
     } catch (err) {
       setError(extractErrorMessage(err))
@@ -637,6 +545,7 @@ export default function PatientRegister() {
                     className="fingerprint-reset"
                     onClick={() => {
                       setFingerprintStatus('waiting')
+                      setFingerprintTemplate(null)
                     }}
                   >
                     Scan ulang
@@ -660,7 +569,7 @@ export default function PatientRegister() {
           <div className="form-section-header">
 
             <div className="form-section-icon contact">
-              <ContactIcon size={18} />
+              <PhoneIcon size={18} />
             </div>
 
             <div>

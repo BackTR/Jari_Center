@@ -25,7 +25,6 @@ class VisitResource extends JsonResource
             'queue' => $this->whenLoaded('queue', function () {
                 return $this->queue ? [
                     'queue_number' => $this->queue->queue_number,
-                    'status' => $this->queue->status,
                     'queue_date' => $this->queue->queue_date->format('Y-m-d'),
                 ] : null;
                 }),

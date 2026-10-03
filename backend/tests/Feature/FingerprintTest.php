@@ -7,6 +7,7 @@ use App\Models\Patient;
 use App\Models\Facility;
 use App\Models\PatientFacilityMapping;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class FingerprintTest extends TestCase
@@ -116,6 +117,42 @@ class FingerprintTest extends TestCase
                 'matched' => false,
                 'message' => 'Sidik jari tidak cocok dengan data pasien manapun.',
             ]);
+    }
+
+    public function test_match_hides_existence_of_other_facility_patient(): void
+    {
+        $token = $this->user->createToken('test-token')->plainTextToken;
+
+        $this->withHeader('Authorization', "Bearer {$token}")
+            ->postJson("/api/patients/{$this->patient->id}/fingerprint/enroll", [
+                'template' => 'SIMULATED_FP_TEMPLATE_SITI_AMINAH_001',
+            ]);
+
+        Auth::forgetGuards();
+
+        $otherFacility = Facility::factory()->create();
+        $otherUser = User::factory()->create([
+            'facility_id' => $otherFacility->id,
+            'role' => 'petugas_registrasi',
+        ]);
+
+        $denied = $this->withHeader('Authorization', 'Bearer ' . $otherUser->createToken('t')->plainTextToken)
+            ->postJson('/api/fingerprint/match', [
+                'template' => 'SIMULATED_FP_TEMPLATE_SITI_AMINAH_001',
+            ]);
+
+        $unknown = $this->postJson('/api/fingerprint/match', [
+            'template' => 'TEMPLATE_YANG_TIDAK_ADA',
+        ]);
+
+        // Balasannya harus identik, kalau tidak pemanggil bisa menebak
+        // sidik jari itu milik pasien mana.
+        $denied->assertStatus(200);
+        $this->assertSame(
+            $unknown->json(),
+            $denied->json(),
+            'Unauthorized match harus identik dengan no-match.'
+        );
     }
 
     public function test_enroll_fingerprint_patient_not_found(): void

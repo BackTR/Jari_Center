@@ -3,53 +3,60 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Models\Facility;
 use App\Models\Patient;
+use App\Models\User;
 use App\Models\Visit;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
     public function dashboard(): JsonResponse
     {
-        $totalPatients = Patient::count();
-        $totalVisitsToday = Visit::whereDate('created_at', today())->count();
-        $totalFacilities = Facility::where('is_active', true)->count();
-        $totalUsers = User::where('is_active', true)->count();
+        $start = today()->subDays(6)->startOfDay();
 
-        // Grafik kunjungan 7 hari terakhir
-        $visitsLast7Days = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $date = today()->subDays($i);
-            $visitsLast7Days[] = [
-                'date' => $date->format('Y-m-d'),
-                'total' => Visit::whereDate('created_at', $date)->count(),
-            ];
-        }
+        // Dua query terkelompok, bukan satu COUNT per hari (dulu 18 query).
+        $visitsPerDay = Visit::where('created_at', '>=', $start)
+            ->selectRaw('DATE(created_at) as day, COUNT(*) as total')
+            ->groupBy('day')
+            ->pluck('total', 'day');
 
-        // Grafik pasien baru 7 hari terakhir
-        $patientsLast7Days = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $date = today()->subDays($i);
-            $patientsLast7Days[] = [
-                'date' => $date->format('Y-m-d'),
-                'total' => Patient::whereDate('created_at', $date)->count(),
-            ];
-        }
+        $patientsPerDay = Patient::where('created_at', '>=', $start)
+            ->selectRaw('DATE(created_at) as day, COUNT(*) as total')
+            ->groupBy('day')
+            ->pluck('total', 'day');
 
         return response()->json([
             'data' => [
-                'total_patients' => $totalPatients,
-                'total_visits_today' => $totalVisitsToday,
-                'total_facilities' => $totalFacilities,
-                'total_users' => $totalUsers,
-                'visits_last_7_days' => $visitsLast7Days,
-                'patients_last_7_days' => $patientsLast7Days,
+                'total_patients' => Patient::count(),
+                'total_visits_today' => Visit::whereDate('created_at', today())->count(),
+                'total_facilities' => Facility::where('is_active', true)->count(),
+                'total_users' => User::where('is_active', true)->count(),
+                'visits_last_7_days' => $this->fillSevenDays($visitsPerDay),
+                'patients_last_7_days' => $this->fillSevenDays($patientsPerDay),
             ],
         ]);
+    }
+
+    /**
+     * @param  Collection<string, int>  $countsTerkelompok  key = Y-m-d
+     * @return array<int, array{date: string, total: int}>
+     */
+    private function fillSevenDays(Collection $countsTerkelompok): array
+    {
+        $rows = [];
+
+        for ($i = 6; $i >= 0; $i--) {
+            $date = today()->subDays($i)->format('Y-m-d');
+            $rows[] = ['date' => $date, 'total' => (int) ($countsTerkelompok[$date] ?? 0)];
+        }
+
+        return $rows;
     }
 
     public function facilities(): JsonResponse
@@ -84,10 +91,11 @@ class AdminController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'type' => ['required', 'in:hospital,clinic,puskesmas'],
+            'type' => ['required', Rule::in(Facility::TYPES)],
             'code' => ['required', 'string', 'unique:facilities,code'],
             'address' => ['nullable', 'string'],
             'phone' => ['nullable', 'string', 'max:20'],
+            'is_active' => ['sometimes', 'boolean'],
         ]);
 
         $facility = Facility::create($validated);
@@ -104,7 +112,7 @@ class AdminController extends Controller
 
         $validated = $request->validate([
             'name' => ['sometimes', 'string', 'max:255'],
-            'type' => ['sometimes', 'in:hospital,clinic,puskesmas'],
+            'type' => ['sometimes', Rule::in(Facility::TYPES)],
             'code' => ['sometimes', 'string', 'unique:facilities,code,' . $id],
             'address' => ['nullable', 'string'],
             'phone' => ['nullable', 'string', 'max:20'],
@@ -204,21 +212,6 @@ class AdminController extends Controller
 
         return response()->json([
             'message' => 'Password berhasil direset.',
-        ]);
-    }
-
-    public function activities(): JsonResponse
-    {
-        // ponytail: belum ada tabel audit, jadi selalu kosong. Hapus endpoint ini
-        // (dan route + nav item) sampai activity logging benar-benar dikerjakan.
-        return response()->json([
-            'data' => [],
-            'meta' => [
-                'current_page' => 1,
-                'last_page' => 1,
-                'per_page' => 20,
-                'total' => 0,
-            ],
         ]);
     }
 }

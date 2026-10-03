@@ -17,8 +17,7 @@ class PolyclinicController extends Controller
 
         $facilityId = (int) $request->query('facility_id');
 
-        // Check facility access
-        if (! $this->canAccessFacility($request, $facilityId)) {
+        if (! $request->user()->canAccessFacility($facilityId)) {
             return response()->json([
                 'message' => 'Anda tidak memiliki akses ke faskes ini.',
             ], 403);
@@ -30,12 +29,5 @@ class PolyclinicController extends Controller
             ->get(['id', 'facility_id', 'name', 'code', 'is_active']);
 
         return response()->json(['data' => $polyclinics]);
-    }
-
-    private function canAccessFacility(Request $request, int $facilityId): bool
-    {
-        $user = $request->user();
-
-        return $user->role === 'super_admin' || $user->facility_id === $facilityId;
     }
 }

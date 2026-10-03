@@ -188,7 +188,8 @@
   color: #666;
 }
 
-.petugas-queue-status,
+/* Antrean dan kunjungan pakai kelas yang sama: keduanya menampilkan
+   tahap kunjungan, jadi warna status-nya identik. */
 .petugas-visit-status {
   padding: 4px 8px;
   border-radius: 4px;
@@ -197,27 +198,14 @@
   text-transform: uppercase;
 }
 
-.petugas-queue-status--waiting {
+.petugas-visit-status--pending_verification,
+.petugas-visit-status--registered {
   background: #fff3e0;
   color: #f57c00;
 }
 
-.petugas-queue-status--called {
-  background: #e3f2fd;
-  color: #1976d2;
-}
-
-.petugas-queue-status--in_service {
-  background: #e8f5e9;
-  color: #388e3c;
-}
-
-.petugas-visit-status--pending_verification {
-  background: #fff3e0;
-  color: #f57c00;
-}
-
-.petugas-visit-status--verified {
+.petugas-visit-status--verified,
+.petugas-visit-status--in_service {
   background: #e3f2fd;
   color: #1976d2;
 }

@@ -3,80 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext.jsx'
 import { extractErrorMessage } from '../../utils/errors.js'
 import StatCard from '../../components/StatCard/StatCard.jsx'
-import api from '../../api/axios'
+import { getFacilityDashboard } from '../../api/facilities.js'
+import { getQueues } from '../../api/queues.js'
+import { getVisits } from '../../api/visits.js'
+import { Icon } from '../../components/icons.jsx'
 import './PetugasDashboard.css'
-
-const Icon = ({ name, size = 24 }) => {
-  const icons = {
-    users: (
-      <>
-        <circle cx="9" cy="8" r="3" />
-        <path d="M3.5 20c.6-3.3 2.5-5.2 5.5-5.2s4.9 1.9 5.5 5.2" />
-        <path d="M16 11a3 3 0 1 0 0-6" />
-        <path d="M17 15c2.1.3 3.4 1.8 3.8 4" />
-      </>
-    ),
-    calendar: (
-      <>
-        <rect x="4" y="5" width="16" height="15" rx="2" />
-        <path d="M8 3v4" />
-        <path d="M16 3v4" />
-        <path d="M4 10h16" />
-      </>
-    ),
-    queue: (
-      <>
-        <rect x="4" y="3.5" width="16" height="17" rx="2" />
-        <path d="M8 7.5h8" />
-        <path d="M8 11.5h2" />
-        <path d="M14 11.5h2" />
-        <path d="M8 15.5h2" />
-        <path d="M14 15.5h2" />
-      </>
-    ),
-    check: (
-      <>
-        <circle cx="12" cy="12" r="9" />
-        <path d="m8 12 2.5 2.5L16 9" />
-      </>
-    ),
-    search: (
-      <>
-        <circle cx="10.8" cy="10.8" r="6.5" />
-        <path d="m16 16 5 5" />
-      </>
-    ),
-    userPlus: (
-      <>
-        <circle cx="9" cy="8" r="3.2" />
-        <path d="M3.5 20c.6-3.3 2.5-5.2 5.5-5.2s4.9 1.9 5.5 5.2" />
-        <path d="M18 9v6" />
-        <path d="M15 12h6" />
-      </>
-    ),
-    bell: (
-      <>
-        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
-        <path d="M13.7 21a2 2 0 0 1-3.4 0" />
-      </>
-    ),
-  }
-
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      {icons[name]}
-    </svg>
-  )
-}
 
 export default function PetugasDashboard() {
   const navigate = useNavigate()
@@ -101,9 +32,9 @@ export default function PetugasDashboard() {
       setError('')
 
       const [statsRes, queuesRes, visitsRes] = await Promise.all([
-        api.get(`/facilities/${facilityId}/dashboard`),
-        api.get(`/facilities/${facilityId}/queues`),
-        api.get('/visits', { params: { facility_id: facilityId } }),
+        getFacilityDashboard(facilityId),
+        getQueues(facilityId),
+        getVisits(facilityId),
       ])
 
       setStats(statsRes.data?.data ?? null)
@@ -196,7 +127,7 @@ export default function PetugasDashboard() {
           <StatCard
             icon={<Icon name="queue" />}
             label="Antrean Menunggu"
-            value={queues.filter(q => q.status === 'waiting').length}
+            value={queues.filter(q => !['completed', 'cancelled'].includes(q.visit_status)).length}
             color="orange"
           />
           <StatCard
@@ -246,8 +177,8 @@ export default function PetugasDashboard() {
                     <strong>{queue.patient?.name || 'Pasien'}</strong>
                     <span>{queue.polyclinic || 'Umum'}</span>
                   </div>
-                  <span className={`petugas-queue-status petugas-queue-status--${queue.status}`}>
-                    {queue.status}
+                  <span className={`petugas-visit-status petugas-visit-status--${queue.visit_status}`}>
+                    {queue.visit_status}
                   </span>
                 </div>
               ))

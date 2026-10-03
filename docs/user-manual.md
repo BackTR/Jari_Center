@@ -1,131 +1,117 @@
 # Jari Center - User Manual
 
-## 📖 Daftar Isi
+## Daftar Isi
 
 1. [Pendahuluan](#pendahuluan)
 2. [Login](#login)
-3. [Super Admin Dashboard](#super-admin-dashboard)
-4. [Petugas Registrasi Dashboard](#petugas-registrasi-dashboard)
-5. [Manajemen Pasien](#manajemen-pasien)
-6. [Manajemen Kunjungan](#manajemen-kunjungan)
-7. [Manajemen Antrean](#manajemen-antrean)
-8. [Fingerprint Simulation](#fingerprint-simulation)
-9. [Troubleshooting](#troubleshooting)
+3. [Role dan Hak Akses](#role-dan-hak-akses)
+4. [Super Admin](#super-admin)
+5. [Petugas Registrasi](#petugas-registrasi)
+6. [Manajemen Pasien](#manajemen-pasien)
+7. [Manajemen Kunjungan](#manajemen-kunjungan)
+8. [Antrean](#antrean)
+9. [Sidik Jari](#sidik-jari)
+10. [Troubleshooting](#troubleshooting)
 
 ---
 
 ## Pendahuluan
 
-Jari Center adalah platform Digital Health Identity & Interoperability yang memungkinkan pasien memiliki satu identitas kesehatan digital (Jari ID) yang dapat digunakan di berbagai fasilitas kesehatan.
+Jari Center adalah aplikasi registrasi dan antrean fasilitas kesehatan. Setiap
+pasien mendapat satu identitas digital bernama **Jari ID** yang berlaku lintas
+faskes, plus satu **Nomor RM** per faskes.
 
-### Role yang Tersedia
+Aplikasi ini terdiri dari dua bagian:
 
-| Role | Deskripsi |
-|------|-----------|
-| `super_admin` | Mengelola sistem, faskes, dan user |
-| `petugas_registrasi` | Mendaftarkan pasien dan kunjungan |
-| `perawat` | Melihat riwayat pasien |
-| `dokter` | Melihat rekam medis dan menulis resep |
-| `kasir` | Proses pembayaran |
-| `petugas_farmasi` | Proses resep dan dispensing obat |
+| Bagian | Lokasi | Menjalankan |
+|--------|--------|-------------|
+| API | `backend/` | PHP + Laravel |
+| Antarmuka | `frontend/` | React + Vite |
+
+Belum ada integrasi SATUSEHAT/BPJS, rekam medis lengkap, resep, atau mode IGD.
 
 ---
 
 ## Login
 
-### Cara Login
-
-1. Buka halaman login
+1. Buka halaman login di `frontend/`
 2. Masukkan email dan password
-3. Klik tombol "Masuk"
-4. Sistem akan mengarahkan ke dashboard sesuai role
+3. Sistem mengarahkan ke dashboard sesuai role
 
-### Contoh Akun
+### Akun Demo
 
-| Role | Email | Password |
-|------|-------|----------|
-| Super Admin | admin@jaricenter.test | admin123 |
-| Petugas Registrasi | petugas@jaricenter.test | petugas123 |
+Dibuat oleh `php artisan db:seed`. **Password semuanya `password123`.**
+
+| Role | Email | Faskes |
+|------|-------|--------|
+| Super Admin | `superadmin@jaricenter.test` | — |
+| Petugas Registrasi | `andi@jaricenter.test` | RS Sehat Abadi |
+| Dokter | `budi.dokter@jaricenter.test` | RS Sehat Abadi |
+| Admin Faskes | `admin.klinik@jaricenter.test` | Klinik Sehat Ceria |
+
+Tidak ada pendaftaran mandiri. User hanya dibuat oleh Super Admin.
+
+Sesi login berlaku 12 jam, lalu token otomatis kedaluwarsa.
 
 ---
 
-## Super Admin Dashboard
+## Role dan Hak Akses
 
-### Menu yang Tersedia
+Hanya ada 4 role:
 
-| Menu | Deskripsi |
-|------|-----------|
-| Dashboard | Statistik global sistem |
-| Manajemen Faskes | CRUD faskes |
-| Manajemen User | CRUD user |
-| Log Aktivitas | Log aktivitas sistem |
+| Role | Lingkup | Boleh |
+|------|---------|-------|
+| `super_admin` | Semua faskes | Semua fitur + kelola faskes & user |
+| `facility_admin` | Satu faskes | Sama dengan petugas registrasi |
+| `petugas_registrasi` | Satu faskes | Daftarkan pasien, kunjungan, kelola antrean |
+| `dokter` | Satu faskes | Sama dengan petugas registrasi |
 
-### Fitur Dashboard
+Tiga role selain `super_admin` punya hak akses API yang sama; yang membedakan
+hanya cakupan faskes. **Semua hanya melihat data faskes sendiri**. Mencoba
+mengakses faskes lain atau pasien yang belum pernah terdaftar di faskes itu
+menghasilkan error 403.
 
-#### 1. Statistik Global
-- Total pasien terdaftar
-- Total kunjungan hari ini
-- Total faskes aktif
-- Total user aktif
-- Grafik kunjungan 7 hari terakhir
-- Grafik pasien baru 7 hari terakhir
+Tidak ada role `perawat`, `kasir`, atau `petugas_farmasi` di sistem ini.
 
-#### 2. Manajemen Faskes
-- Lihat daftar semua faskes
-- Tambah faskes baru
-- Edit faskes
-- Nonaktifkan faskes
+---
 
-#### 3. Manajemen User
-- Lihat daftar semua user
-- Tambah user baru
-- Edit user
+## Super Admin
+
+### Dashboard
+
+Empat kartu statistik: total pasien, kunjungan hari ini, faskes aktif, user
+aktif.
+
+### Manajemen Faskes
+
+- Lihat daftar semua faskes, jumlah user, jumlah kunjungan
+- Tambah faskes: nama, tipe (hospital/clinic/puskesmas), kode unik, alamat, telepon
+- Edit faskes termasuk menonaktifkannya
+
+### Manajemen User
+
+- Lihat semua user beserta role dan faskesnya
+- Tambah user: nama, email, password, role, faskes
+- Edit user: ganti role, faskes, atau status aktif
 - Reset password user
-- Nonaktifkan user
 
-#### 4. Log Aktivitas
-- Lihat log aktivitas sistem
-- Filter berdasarkan tanggal
-- Export log
+Super Admin tidak punya faskes, jadi `facility_id` kosong saat menambah user
+dengan role `super_admin`.
+
+### Log Aktivitas
+
+Belum ada. Endpoint `/api/admin/activities` sudah dihapus karena tidak ada
+tabel audit.
 
 ---
 
-## Petugas Registrasi Dashboard
+## Petugas Registrasi
 
-### Menu yang Tersedia
+Menu: Beranda, Cari Pasien, Daftarkan Pasien, Daftarkan Kunjungan, Nomor
+Antrian, Kunjungan.
 
-| Menu | Deskripsi |
-|------|-----------|
-| Beranda | Statistik dan quick actions |
-| Cari Pasien | Mencari pasien berdasarkan Jari ID, NIK, atau nama |
-| Daftarkan Pasien | Mendaftarkan pasien baru |
-| Daftarkan Kunjungan | Mendaftarkan kunjungan baru |
-| Nomor Antrian | Melihat dan mengelola antrean |
-| Kunjungan | Melihat daftar kunjungan |
-
-### Fitur Dashboard
-
-#### 1. Statistik Hari Ini
-- Pasien baru hari ini
-- Kunjungan hari ini
-- Antrean menunggu
-- Kunjungan selesai
-
-#### 2. Quick Actions
-- Cari Pasien
-- Daftarkan Pasien
-- Daftarkan Kunjungan
-- Nomor Antrian
-
-#### 3. Antrean Saat Ini
-- Daftar antrean real-time
-- Status antrean per poliklinik
-- Waktu dipanggil
-
-#### 4. Kunjungan Terbaru
-- Daftar kunjungan terbaru
-- Status kunjungan
-- Aksi detail
+Beranda menampilkan statistik hari ini, antrean berjalan, dan kunjungan
+terbaru.
 
 ---
 
@@ -134,32 +120,35 @@ Jari Center adalah platform Digital Health Identity & Interoperability yang memu
 ### Mencari Pasien
 
 1. Buka menu "Cari Pasien"
-2. Pilih tipe pencarian (Jari ID, NIK, atau Nama)
-3. Masukkan kata kunci
-4. Klik tombol "Cari"
-5. Sistem akan menampilkan hasil pencarian
+2. Pilih tab **Cari NIK / Nama** atau **Sidik Jari**
+3. Tab NIK/Nama: pilih basis pencarian (NIK / Jari ID / Nama), ketik kata kunci
+4. Tab Sidik Jari: tempel template hasil scan scanner
+5. Hasil hanya menampilkan pasien yang sudah terdaftar di faskes Anda
 
 ### Mendaftarkan Pasien Baru
 
 1. Buka menu "Daftarkan Pasien"
-2. Isi data identitas pasien:
-   - Nama lengkap (wajib)
-   - NIK (opsional)
-   - Tanggal lahir (wajib)
-   - Jenis kelamin (wajib)
-   - Alamat (opsional)
-   - Nomor telepon (opsional)
-3. Daftarkan sidik jari (simulasi)
-4. Isi data penjamin (opsional)
-5. Klik tombol "Simpan Pasien"
-6. Sistem akan menampilkan Jari ID pasien
+2. Klik "Daftarkan Sidik Jari" dan tunggu proses scan
+3. Isi data pasien: nama, tanggal lahir, jenis kelamin (wajib); NIK, alamat,
+   telepon, penjamin (opsional)
+4. Klik "Simpan Pasien"
+5. Sistem menampilkan Jari ID
 
-### Data Penjamin
+Sidik jari wajib diisi sebelum menyimpan. Pasien langsung mendapat Nomor RM di
+faskes tempat ia didaftarkan.
+
+### Field Pasien
 
 | Field | Wajib | Keterangan |
 |-------|-------|------------|
-| Penjamin | Tidak | BPJS / Mandiri / lainnya |
-| Nomor Penjamin | Tidak | Nomor polis atau nomor BPJS |
+| Nama | Ya | |
+| Tanggal lahir | Ya | Harus sebelum hari ini |
+| Jenis kelamin | Ya | male / female |
+| NIK | Tidak | 16 digit, unik |
+| Alamat | Tidak | |
+| Telepon | Tidak | |
+| Penjamin | Tidak | BPJS / Mandiri |
+| Nomor penjamin | Tidak | |
 
 ---
 
@@ -167,48 +156,37 @@ Jari Center adalah platform Digital Health Identity & Interoperability yang memu
 
 ### Mendaftarkan Kunjungan
 
-1. Buka menu "Daftarkan Kunjungan"
-2. Cari pasien (langkah 1)
-3. Pilih pasien
-4. Isi detail kunjungan:
-   - Metode identifikasi (wajib)
-   - Poliklinik (opsional)
-   - Metode pembayaran (wajib)
-   - Nomor BPJS (wajib jika BPJS)
-   - Nomor surat rujukan (opsional)
-   - Catatan (opsional)
-5. Klik tombol "Daftarkan Kunjungan"
-6. Sistem akan membuat nomor antrean
+1. Menu "Daftarkan Kunjungan"
+2. Pilih pasien hasil pencarian
+3. Isi: metode identifikasi, poliklinik, metode pembayaran, nomor BPJS (wajib
+   jika BPJS), nomor surat rujukan, catatan
+4. Klik "Daftarkan Kunjungan"
+5. Sistem otomatis membuat **Nomor RM** (bila belum ada) dan **nomor antrean**
 
-### Status Kunjungan
+### Tahap Kunjungan
 
-| Status | Deskripsi |
-|--------|-----------|
+| Tahap | Deskripsi |
+|-------|-----------|
 | `pending_verification` | Menunggu verifikasi petugas |
-| `verified` | Data pasien terverifikasi |
+| `verified` | Data terverifikasi |
 | `registered` | Terdaftar di poliklinik |
 | `in_service` | Sedang dilayani |
-| `completed` | Pelayanan selesai |
-| `cancelled` | Kunjungan dibatalkan |
-
-### Alur Status
+| `completed` | Selesai |
+| `cancelled` | Dibatalkan |
 
 ```
 pending_verification → verified → registered → in_service → completed
-                    ↘ cancelled (boleh dari tahap manapun sebelum completed)
+                    ↘ cancelled (boleh dari tahap sebelum completed)
 ```
+
+Tahap hanya boleh maju satu per satu. Melompat ditolak dengan 422. Setiap
+perpindahan tercatat di riwayat kunjungan.
 
 ---
 
-## Manajemen Antrean
+## Antrean
 
-### Melihat Antrean
-
-1. Buka menu "Nomor Antrian"
-2. Sistem akan menampilkan daftar antrean hari ini
-3. Antrean diurutkan berdasarkan nomor antrean
-
-### Status Antrean
+Menu "Nomor Antrian" menampilkan antrean hari ini, diurutkan per nomor.
 
 | Status | Deskripsi |
 |--------|-----------|
@@ -218,85 +196,66 @@ pending_verification → verified → registered → in_service → completed
 | `done` | Selesai |
 | `skipped` | Dilewati |
 
+Nomor antrean memakai prefiks huruf pertama kode poliklinik, contoh `P-001`
+untuk Poli Penyakit Dalam, `U-001` tanpa poliklinik.
+
 ---
 
-## Fingerprint Simulation
+## Sidik Jari
 
-### Mendaftarkan Sidik Jari
+**Simulasi.** Belum ada integrasi scanner sungguhan. Backend menyimpan HMAC-SHA256
+dari template, bukan citra sidik jari.
 
-1. Buka halaman "Daftarkan Pasien"
-2. Klik tombol "Daftarkan Sidik Jari"
-3. Tunggu proses scanning selesai
-4. Sistem akan menampilkan pesan sukses
+### Mendaftarkan
 
-### Mencocokkan Sidik Jari
+Tombol "Daftarkan Sidik Jari" di halaman pendaftaran pasien menghasilkan template
+dummy, lalu dikirim ke server setelah pasien tersimpan.
 
-1. Buka halaman "Cari Pasien"
-2. Pilih tab "Sidik Jari"
-3. Klik tombol "Scan Sidik Jari"
-4. Sistem akan mencari pasien yang cocok
+### Mencocokkan
+
+Tab "Sidik Jari" di halaman Cari Pasien. Tempel template yang sama dengan yang
+digunakan saat pendaftaran, lalu klik "Identifikasi".
+
+Satu template hanya bisa dipakai satu pasien; enroll ulang template yang sama
+ditolak dengan 409.
+
+Kalau sidik jari milik pasien faskes lain, sistem menjawab "tidak cocok" —
+identik dengan jawaban saat template memang tidak terdaftar.
 
 ---
 
 ## Troubleshooting
 
-### Tidak Bisa Login
+### Tidak bisa login
 
-**Penyebab:**
-- Email atau password salah
-- Akun nonaktif
+Email/password salah, akun nonaktif, atau lebih dari 5 percobaan dalam 1 menit
+(rate limit).
 
-**Solusi:**
-- Pastikan email dan password benar
-- Hubungi super admin untuk mengaktifkan akun
+### 403 "Anda tidak memiliki akses ke faskes ini"
 
-### Tidak Bisa Akses Dashboard
+Akun Anda terdaftar di faskes lain. Hubungi Super Admin.
 
-**Penyebab:**
-- Token expired
-- Role tidak memiliki akses
+### Pasien tidak muncul saat mencari
 
-**Solusi:**
-- Login ulang
-- Hubungi super admin untuk memeriksa role
+Petugas hanya melihat pasien yang sudah pernah terdaftar atau berkunjung di
+faskes-nya. Ini melindungi data antar faskes. Daftarkan pasien lewat "Daftarkan
+Pasien" dulu.
 
-### Data Tidak Muncul
+### Gagal menyimpan pasien
 
-**Penyebab:**
-- Belum ada data
-- Filter tidak sesuai
+Sidik jari belum didaftarkan. Klik tombol scan terlebih dahulu.
 
-**Solusi:**
-- Cek filter yang digunakan
-- Tambahkan data baru
+### Error 422 saat ubah tahap kunjungan
 
-### Error 500
+Tahap hanya boleh maju satu per satu sesuai alur di atas.
 
-**Penyebab:**
-- Server error
-- Bug pada sistem
+### Error 409 saat daftarkan sidik jari
 
-**Solusi:**
-- Refresh halaman
-- Hubungi tim technical support
+Template sudah dipakai pasien lain. Scan ulang untuk template baru.
 
 ---
 
-## 📞 Kontak
+## Kontak
 
-Untuk bantuan lebih lanjut, hubungi:
 - Email: support@jaricenter.test
-- Phone: 021-1234567
-
----
-
-## 📝 Changelog
-
-### v1.0.0 (2026-09-30)
-- Initial release
-- Super Admin Dashboard
-- Petugas Registrasi Dashboard
-- Patient Registration
-- Visit Registration
-- Queue Management
-- Fingerprint Simulation
+- Telepon: 021-1234567

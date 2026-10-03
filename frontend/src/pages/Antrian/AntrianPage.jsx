@@ -5,209 +5,23 @@ import { useAuth } from '../../context/AuthContext.jsx'
 import { getQueues } from '../../api/queues.js'
 import { getVisits } from '../../api/visits.js'
 import { extractErrorMessage } from '../../utils/errors.js'
+import {
+  ArrowRightIcon,
+  CheckCircleIcon,
+  ClockIcon,
+  HospitalIcon,
+  QueueIcon,
+  RefreshIcon,
+  UserIcon,
+  XCircleIcon,
+} from '../../components/icons.jsx'
 
 import './AntrianPage.css'
 
 
 /* =========================================================
-   ICONS
-========================================================= */
-
-function QueueIcon({ size = 22 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect
-        x="4"
-        y="3.5"
-        width="16"
-        height="17"
-        rx="2"
-      />
-
-      <path d="M8 7.5h8" />
-      <path d="M8 11.5h2" />
-      <path d="M14 11.5h2" />
-      <path d="M8 15.5h2" />
-      <path d="M14 15.5h2" />
-    </svg>
-  )
-}
-
-
-function RefreshIcon({ size = 17 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M20 11a8 8 0 0 0-14.9-4" />
-      <path d="M4 4v5h5" />
-      <path d="M4 13a8 8 0 0 0 14.9 4" />
-      <path d="M20 20v-5h-5" />
-    </svg>
-  )
-}
-
-
-function ClockIcon({ size = 18 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle
-        cx="12"
-        cy="12"
-        r="8.5"
-      />
-
-      <path d="M12 7v5l3 2" />
-    </svg>
-  )
-}
-
-
-function CheckIcon({ size = 18 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.9"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle
-        cx="12"
-        cy="12"
-        r="8.5"
-      />
-
-      <path d="m8.5 12 2.3 2.3 4.7-5" />
-    </svg>
-  )
-}
-
-
-function SkipIcon({ size = 18 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle
-        cx="12"
-        cy="12"
-        r="8.5"
-      />
-
-      <path d="m9 9 6 6" />
-      <path d="m15 9-6 6" />
-    </svg>
-  )
-}
-
-
-function HospitalIcon({ size = 17 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M4 21V6h16v15" />
-      <path d="M8 6V3h8v3" />
-      <path d="M9 10h6" />
-      <path d="M12 7v6" />
-      <path d="M8 17h2" />
-      <path d="M14 17h2" />
-      <path d="M8 21v-4" />
-      <path d="M16 21v-4" />
-    </svg>
-  )
-}
-
-
-function UserIcon({ size = 14 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle
-        cx="12"
-        cy="8"
-        r="3.5"
-      />
-
-      <path d="M5 20c.7-3.7 3-5.5 7-5.5s6.3 1.8 7 5.5" />
-    </svg>
-  )
-}
-
-
-function ArrowRightIcon({ size = 17 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h13" />
-      <path d="m13 6 6 6-6 6" />
-    </svg>
-  )
-}
-
-
-/* =========================================================
    HELPERS
-========================================================= */
+   ========================================================= */
 
 function getInitials(name = '') {
   const words = name
@@ -244,150 +58,35 @@ function formatDateIndonesia(date = new Date()) {
 }
 
 
-function normalizeStatus(visitStatus, queueStatus) {
-  /*
-   * PRIORITAS:
-   * status kunjungan.
-   *
-   * Jadi kalau kunjungan sudah completed,
-   * antrean juga ditampilkan Selesai.
-   */
+/**
+ * Antrean tidak punya tahap sendiri; API mengirim visit_status yang sama
+ * dengan visits.status. Peta ini hanya untuk warna/label tampilan.
+ */
+const QUEUE_STATUS_VIEW = {
+  pending_verification: { key: 'waiting', label: 'Menunggu Verifikasi' },
+  verified: { key: 'waiting', label: 'Menunggu' },
+  registered: { key: 'called', label: 'Dipanggil' },
+  in_service: { key: 'in_service', label: 'Sedang Dilayani' },
+  completed: { key: 'done', label: 'Selesai' },
+  cancelled: { key: 'skipped', label: 'Dibatalkan' },
+}
 
-  switch (visitStatus) {
-    case 'waiting_verification':
-      return {
-        key: 'waiting',
-        label: 'Menunggu Verifikasi',
-      }
-
-    case 'verified':
-      return {
-        key:
-          queueStatus === 'in_service'
-            ? 'in_service'
-            : queueStatus === 'called'
-              ? 'called'
-              : 'waiting',
-        label:
-          queueStatus === 'in_service'
-            ? 'Sedang Dilayani'
-            : queueStatus === 'called'
-              ? 'Dipanggil'
-              : 'Menunggu',
-      }
-
-    case 'in_service':
-    case 'serving':
-    case 'processing':
-      return {
-        key: 'in_service',
-        label: 'Sedang Dilayani',
-      }
-
-    case 'completed':
-    case 'done':
-      return {
-        key: 'done',
-        label: 'Selesai',
-      }
-
-    case 'cancelled':
-    case 'canceled':
-      return {
-        key: 'cancelled',
-        label: 'Dibatalkan',
-      }
-
-    default:
-      break
-  }
-
-
-  /*
-   * Kalau visit tidak ketemu,
-   * fallback ke status queue lama.
-   */
-
-  switch (queueStatus) {
-    case 'called':
-      return {
-        key: 'called',
-        label: 'Dipanggil',
-      }
-
-    case 'in_service':
-      return {
-        key: 'in_service',
-        label: 'Sedang Dilayani',
-      }
-
-    case 'done':
-      return {
-        key: 'done',
-        label: 'Selesai',
-      }
-
-    case 'skipped':
-      return {
-        key: 'skipped',
-        label: 'Dilewati',
-      }
-
-    case 'waiting':
-    default:
-      return {
-        key: 'waiting',
-        label: 'Menunggu',
-      }
-  }
+function normalizeStatus(visitStatus) {
+  return QUEUE_STATUS_VIEW[visitStatus] || { key: 'waiting', label: 'Menunggu' }
 }
 
 
-/*
- * Cocokkan queue dengan visit.
- *
- * Kita tidak bergantung pada queue.visit_id,
- * sehingga tidak perlu mengubah struktur database
- * yang sudah ada.
- */
 function findVisitForQueue(queue, visits) {
-  const queueNumber =
-    queue.queue_number
-
-  if (!queueNumber) {
-    return null
+  if (queue.visit_id != null) {
+    const byVisitId = visits.find(v => Number(v.id) === Number(queue.visit_id))
+    if (byVisitId) return byVisitId
   }
 
-  /*
-   * Paling aman: nomor antrean.
-   */
-  const byQueueNumber =
-    visits.find(
-      (visit) =>
-        visit.queue?.queue_number ===
-        queueNumber
-    )
+  // ponytail: queue tanpa visit_id (data lama) dicocokkan via nomor antrean.
+  // Saat semua data ter-backfill dari visit registration, hapus fallback ini.
+  if (!queue.queue_number) return null
 
-  if (byQueueNumber) {
-    return byQueueNumber
-  }
-
-  /*
-   * Fallback patient ID.
-   */
-  const patientId =
-    queue.patient?.id ||
-    queue.patient_id
-
-  if (!patientId) {
-    return null
-  }
-
-  return visits.find(
-    (visit) =>
-      visit.patient?.id === patientId &&
-      visit.queue?.queue_number === queueNumber
-  ) || null
+  return visits.find(v => v.queue?.queue_number === queue.queue_number) || null
 }
 
 
@@ -404,7 +103,7 @@ function QueueStatusBadge({ status }) {
     status.key === 'done'
   ) {
     icon = (
-      <CheckIcon size={14} />
+      <CheckCircleIcon size={14} />
     )
   }
 
@@ -413,7 +112,7 @@ function QueueStatusBadge({ status }) {
     status.key === 'skipped'
   ) {
     icon = (
-      <SkipIcon size={14} />
+      <XCircleIcon size={14} />
     )
   }
 
@@ -546,8 +245,8 @@ export default function AntrianPage() {
 
           const effectiveStatus =
             normalizeStatus(
-              visit?.status,
-              queue.status
+              queue.visit_status ||
+              visit?.status
             )
 
           return {
@@ -578,10 +277,6 @@ export default function AntrianPage() {
               '—',
 
             effectiveStatus,
-
-            calledAt:
-              queue.called_at ||
-              null,
           }
         })
         .sort((a, b) => {
@@ -1015,10 +710,6 @@ export default function AntrianPage() {
                 </th>
 
                 <th>
-                  Dipanggil
-                </th>
-
-                <th>
                   Aksi
                 </th>
 
@@ -1110,29 +801,6 @@ export default function AntrianPage() {
                             queue.effectiveStatus
                           }
                         />
-
-                      </td>
-
-
-                      <td>
-
-                        {queue.calledAt ? (
-                          <span className="queue-called-time">
-                            {new Date(
-                              queue.calledAt
-                            ).toLocaleTimeString(
-                              'id-ID',
-                              {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                              }
-                            )}
-                          </span>
-                        ) : (
-                          <span className="queue-not-called">
-                            —
-                          </span>
-                        )}
 
                       </td>
 

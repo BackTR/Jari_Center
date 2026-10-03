@@ -10,138 +10,13 @@ import {
   IDENTIFICATION_METHOD_LABELS,
 } from '../../utils/stage.js'
 import StageBadge from '../../components/StageBadge/StageBadge.jsx'
+import { Icon } from '../../components/icons.jsx'
 import './VisitDetail.css'
 
 
 /* =========================================================
-   ICON
-========================================================= */
-
-function Icon({ name, size = 18 }) {
-  const paths = {
-    clock: (
-      <>
-        <circle cx="12" cy="12" r="8.5" />
-        <path d="M12 7v5l3 2" />
-      </>
-    ),
-
-    check: (
-      <path d="m5 12 4 4L19 6" />
-    ),
-
-    x: (
-      <>
-        <path d="m7 7 10 10" />
-        <path d="m17 7-10 10" />
-      </>
-    ),
-
-    user: (
-      <>
-        <circle cx="12" cy="8" r="3.2" />
-        <path d="M5 20c.8-4 3-6 7-6s6.2 2 7 6" />
-      </>
-    ),
-
-    fingerprint: (
-      <>
-        <path d="M12 3.5a8.5 8.5 0 0 0-8.5 8.5" />
-        <path d="M12 6a6 6 0 0 0-6 6" />
-        <path d="M12 8.5A3.5 3.5 0 0 0 8.5 12" />
-        <path d="M12 3.5a8.5 8.5 0 0 1 8.5 8.5" />
-        <path d="M12 6a6 6 0 0 1 6 6" />
-        <path d="M12 8.5a3.5 3.5 0 0 1 3.5 3.5" />
-        <path d="M7 15.5c1-1.1 1.5-2.4 1.5-3.5" />
-        <path d="M17 15.5c-1-1.1-1.5-2.4-1.5-3.5" />
-        <path d="M12 20v-5" />
-      </>
-    ),
-
-    idCard: (
-      <>
-        <rect x="3" y="5" width="18" height="14" rx="2" />
-        <circle cx="8.5" cy="11" r="1.8" />
-        <path d="M6 16c.5-1.6 1.5-2.4 2.5-2.4s2 .8 2.5 2.4" />
-        <path d="M14 9.5h4M14 13h4" />
-      </>
-    ),
-
-    wallet: (
-      <>
-        <rect x="3" y="6" width="18" height="13" rx="2" />
-        <path d="M3 10h18" />
-        <path d="M16 14h3" />
-        <circle
-          cx="16"
-          cy="14"
-          r="0.8"
-          fill="currentColor"
-          stroke="none"
-        />
-      </>
-    ),
-
-    clinic: (
-      <>
-        <rect x="4" y="5" width="16" height="15" rx="2" />
-        <path d="M12 8v6M9 11h6" />
-        <path d="M8 20v-2M16 20v-2" />
-      </>
-    ),
-
-    document: (
-      <>
-        <path d="M7 3h7l4 4v14H7z" />
-        <path d="M14 3v5h4" />
-        <path d="M10 12h5M10 16h5" />
-      </>
-    ),
-
-    arrowLeft: (
-      <>
-        <path d="M19 12H5" />
-        <path d="m11 6-6 6 6 6" />
-      </>
-    ),
-
-    history: (
-      <>
-        <path d="M3 12a9 9 0 1 0 3-6.7" />
-        <path d="M3 4v5h5" />
-        <path d="M12 7v5l3 2" />
-      </>
-    ),
-
-    note: (
-      <>
-        <path d="M5 4h14v16H5z" />
-        <path d="M8 8h8M8 12h8M8 16h5" />
-      </>
-    ),
-  }
-
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      {paths[name]}
-    </svg>
-  )
-}
-
-
-/* =========================================================
    HELPER
-========================================================= */
+   ========================================================= */
 
 function getInitial(name) {
   return name?.charAt(0)?.toUpperCase() || '?'
@@ -369,7 +244,7 @@ export default function VisitDetail() {
     '—'
 
   const isWaiting =
-    visit.status === 'waiting_verification'
+    visit.status === 'pending_verification'
 
   const isCancelled =
     visit.status === 'cancelled'

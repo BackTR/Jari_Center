@@ -83,6 +83,69 @@ class AdminUserTest extends TestCase
             ->assertJsonValidationErrors('facility_id');
     }
 
+    public function test_facility_crud_roundtrip(): void
+    {
+        [$admin, $token] = $this->admin();
+
+        $created = $this->withHeader('Authorization', "Bearer {$token}")
+            ->postJson('/api/admin/facilities', [
+                'name' => 'Puskses Baru',
+                'type' => 'puskesmas',
+                'code' => 'PKM999',
+                'address' => 'Jl. Uji No. 1',
+                'phone' => '031-9999999',
+                'is_active' => true,
+            ])
+            ->assertStatus(201)
+            ->json('data.id');
+
+        $this->withHeader('Authorization', "Bearer {$token}")
+            ->putJson("/api/admin/facilities/{$created}", [
+                'name' => 'Puskses Baru (Direvisi)',
+                'is_active' => false,
+            ])
+            ->assertStatus(200);
+
+        $facility = Facility::findOrFail($created);
+
+        $this->assertSame('Puskses Baru (Direvisi)', $facility->name);
+        $this->assertFalse((bool) $facility->is_active);
+    }
+
+    public function test_facility_edit_accepts_every_enum_type(): void
+    {
+        [$admin, $token] = $this->admin();
+
+        // Semua 7 nilai enum di migration harus bisa disimpan & diedit —
+        // modal edit mengirim ulang type dari baris tabel.
+        foreach (Facility::TYPES as $type) {
+            $created = $this->withHeader('Authorization', "Bearer {$token}")
+                ->postJson('/api/admin/facilities', [
+                    'name' => "Faskes {$type}",
+                    'type' => $type,
+                    'code' => 'T-'.strtoupper($type),
+                ])
+                ->assertStatus(201)
+                ->json('data.id');
+
+            $this->withHeader('Authorization', "Bearer {$token}")
+                ->putJson("/api/admin/facilities/{$created}", [
+                    'type' => $type,
+                    'name' => "Faskes {$type} (Direvisi)",
+                ])
+                ->assertStatus(200);
+        }
+    }
+
+    public function test_admin_routes_reject_non_super_admin(): void
+    {
+        $petugas = User::factory()->create(['role' => 'petugas_registrasi']);
+
+        $this->withHeader('Authorization', 'Bearer ' . $petugas->createToken('t')->plainTextToken)
+            ->getJson('/api/admin/users')
+            ->assertStatus(403);
+    }
+
     public function test_update_user_can_change_role_and_status(): void
     {
         [$admin, $token] = $this->admin();

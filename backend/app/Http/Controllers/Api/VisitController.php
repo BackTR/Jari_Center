@@ -25,6 +25,10 @@ class VisitController extends Controller
 
     public function store(RegisterVisitRequest $request): JsonResponse
     {
+        if (! $request->user()->canAccessFacility((int) $request->validated('facility_id'))) {
+            return $this->forbiddenResponse();
+        }
+
         $visit = $this->registerVisitUseCase->execute(
             $request->validated(),
             $request->user()->id,
@@ -39,6 +43,10 @@ class VisitController extends Controller
 
         if (! $visit) {
             return response()->json(['message' => 'Kunjungan tidak ditemukan.'], 404);
+        }
+
+        if (! $request->user()->canAccessFacility($visit->facility_id)) {
+            return $this->forbiddenResponse();
         }
 
         try {
@@ -65,11 +73,8 @@ class VisitController extends Controller
         $facilityId = (int) $request->query('facility_id');
         $date = $request->query('date', now()->toDateString());
 
-        // Check facility access
-        if (! $this->canAccessFacility($request, $facilityId)) {
-            return response()->json([
-                'message' => 'Anda tidak memiliki akses ke faskes ini.',
-            ], 403);
+        if (! $request->user()->canAccessFacility($facilityId)) {
+            return $this->forbiddenResponse();
         }
 
         $visits = Visit::where('facility_id', $facilityId)
@@ -111,20 +116,17 @@ class VisitController extends Controller
             return response()->json(['message' => 'Kunjungan tidak ditemukan.'], 404);
         }
 
-        // Check facility access
-        if (! $this->canAccessFacility($request, $visit->facility_id)) {
-            return response()->json([
-                'message' => 'Anda tidak memiliki akses ke faskes ini.',
-            ], 403);
+        if (! $request->user()->canAccessFacility($visit->facility_id)) {
+            return $this->forbiddenResponse();
         }
 
         return (new VisitResource($visit))->response();
     }
 
-    private function canAccessFacility(Request $request, int $facilityId): bool
+    private function forbiddenResponse(): JsonResponse
     {
-        $user = $request->user();
-
-        return $user->role === 'super_admin' || $user->facility_id === $facilityId;
+        return response()->json([
+            'message' => 'Anda tidak memiliki akses ke faskes ini.',
+        ], 403);
     }
 }

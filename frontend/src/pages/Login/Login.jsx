@@ -5,6 +5,15 @@ import {
   extractErrorMessage,
   extractFieldErrors,
 } from '../../utils/errors.js'
+import {
+  ArrowRightIcon,
+  EyeIcon,
+  EyeOffIcon,
+  FingerprintIcon,
+  LockIcon,
+  MailIcon,
+  ShieldIcon,
+} from '../../components/icons.jsx'
 import './Login.css'
 
 import logoJariCenter from '../../assets/logo/jari_center.png'
@@ -132,7 +141,7 @@ export default function Login() {
             <div className="fingerprint-ring fingerprint-ring--3"></div>
 
             <div className="fingerprint-center">
-              <FingerprintLargeIcon />
+              <FingerprintIcon />
             </div>
           </div>
 
@@ -337,7 +346,7 @@ export default function Login() {
                 ) : (
                   <>
                     Masuk
-                    <ArrowIcon />
+                    <ArrowRightIcon />
                   </>
                 )}
 
@@ -350,7 +359,7 @@ export default function Login() {
 
             <div className="login-security">
 
-              <ShieldSmallIcon />
+              <ShieldIcon />
 
               <span>
                 Sistem aman · Data Anda terlindungi
@@ -376,92 +385,5 @@ export default function Login() {
 
 
 /* ==================================================
-   ICONS
-================================================== */
-
-function MailIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.8" />
-      <path d="M4 7l8 6 8-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
-function LockIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="10" width="16" height="10" rx="2" stroke="currentColor" strokeWidth="1.8" />
-      <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
-  )
-}
-
-function EyeIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="12" cy="12" r="2.5" stroke="currentColor" strokeWidth="1.8" />
-    </svg>
-  )
-}
-
-function EyeOffIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M3 3l18 18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      <path d="M10.6 6.2A9.5 9.5 0 0 1 12 6c6.1 0 9.5 6 9.5 6a16 16 0 0 1-3.1 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M6.2 6.9C3.9 8.3 2.5 12 2.5 12s3.4 6 9.5 6c1.2 0 2.3-.2 3.3-.6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
-function FingerprintIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 4a7 7 0 0 0-7 7c0 2.3.2 4.5 1.2 6.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-      <path d="M12 7a4 4 0 0 0-4 4c0 3.3.2 5.2 1.2 7" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-      <path d="M12 10a1 1 0 0 0-1 1c0 4.2.8 6.9 2 9" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-      <path d="M16 8.5a6 6 0 0 1 2 4.5c0 3.2.5 5.4 1.5 7" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-    </svg>
-  )
-}
-
-function FingerprintLargeIcon() {
-  return (
-    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M50 17C31.8 17 17 31.8 17 50c0 8.5 1.1 16.5 5.5 23.8" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-      <path d="M50 29c-11.6 0-21 9.4-21 21 0 10.5 1.3 18.7 5.3 25.5" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-      <path d="M50 41c-5 0-9 4-9 9 0 14.5 2.5 22.7 6.8 30" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-      <path d="M65 32c5.8 5 9 11.8 9 20 0 10.7 1.7 19.5 5.2 25.5" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-      <path d="M74 27c7.8 7.1 12 15.8 12 26 0 10.2 1.5 17.5 4 22" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-    </svg>
-  )
-}
-
-function ShieldIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 3l7 3v5.5c0 4.5-2.8 7.7-7 9.5-4.2-1.8-7-5-7-9.5V6l7-3Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
-      <path d="m8.5 12 2.2 2.2 4.8-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
-function ShieldSmallIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 3.5l6.5 2.8v5.1c0 4.1-2.6 7-6.5 8.9-3.9-1.9-6.5-4.8-6.5-8.9V6.3L12 3.5Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
-      <path d="m9 11.7 2 2 4-4.1" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
-function ArrowIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M5 12h13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      <path d="m13 6 6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
+   HELPERS
+   ================================================== */

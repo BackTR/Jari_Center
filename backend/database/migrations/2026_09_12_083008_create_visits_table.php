@@ -14,12 +14,10 @@ return new class extends Migration
             $table->foreignId('facility_id')->constrained('facilities')->cascadeOnDelete();
             $table->foreignId('polyclinic_id')->nullable()->constrained('polyclinics')->nullOnDelete();
             $table->foreignId('registered_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignId('doctor_id')->nullable()->constrained('users')->nullOnDelete();
 
             $table->enum('identification_method', ['jari_id', 'nik', 'fingerprint_simulation', 'qr_code', 'manual']);
             $table->enum('payment_method', ['mandiri', 'bpjs']);
             $table->string('bpjs_number')->nullable();
-            $table->timestamp('bpjs_verified_at')->nullable();
             $table->string('referral_letter_number')->nullable();
 
             $table->enum('status', [

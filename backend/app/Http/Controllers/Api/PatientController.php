@@ -20,7 +20,18 @@ class PatientController extends Controller
 
     public function store(StorePatientRequest $request): JsonResponse
     {
-        $patient = $this->registerPatientUseCase->execute($request->validated());
+        $user = $request->user();
+
+        $data = $request->validated();
+
+        // Petugas selalu mendaftarkan ke faskesnya sendiri. Super admin tidak
+        // punya faskes, jadi ia harus menyebut facility_id — tanpa itu pasien
+        // tercipta tanpa mapping dan tidak bisa ditemukan petugas mana pun.
+        $facilityId = $user->facility_id ?? $data['facility_id'] ?? null;
+
+        unset($data['facility_id']);
+
+        $patient = $this->registerPatientUseCase->execute($data, $facilityId);
 
         return (new PatientResource($patient))
             ->response()
@@ -32,6 +43,7 @@ class PatientController extends Controller
         $patients = $this->identifyPatientUseCase->execute(
             $request->validated('type'),
             $request->validated('value'),
+            $request->user(),
         );
 
         return PatientResource::collection($patients)->response();

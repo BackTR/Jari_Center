@@ -590,16 +590,6 @@
 }
 
 
-.scanner-icon.face {
-  color: #3886c3;
-}
-
-
-.scanner-icon.qr {
-  color: #725ec6;
-}
-
-
 .scanner-text {
   max-width: 430px;
 }
@@ -624,41 +614,6 @@
   font-size: 9px;
 
   line-height: 1.6;
-}
-
-
-/* =========================================================
-   METHOD STATUS
-   ========================================================= */
-
-.method-info {
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  gap: 7px;
-
-  padding-top: 16px;
-
-  color: #8998a5;
-
-  font-size: 8px;
-}
-
-
-.method-status-dot {
-  width: 7px;
-  height: 7px;
-
-  flex: 0 0 7px;
-
-  border-radius: 50%;
-
-  background: #23ad70;
-
-  box-shadow:
-    0 0 0 3px rgba(35, 173, 112, 0.10);
 }
 
 

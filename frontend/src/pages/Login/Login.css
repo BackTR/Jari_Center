@@ -629,24 +629,6 @@
 }
 
 
-.login-forgot-link {
-  color: #0878b8;
-
-  font-size: 10px;
-  font-weight: 700;
-
-  text-decoration: none;
-
-  transition: color 0.18s ease;
-}
-
-.login-forgot-link:hover {
-  color: #073f78;
-
-  text-decoration: underline;
-}
-
-
 /* ==================================================
    INPUT
 ================================================== */
@@ -925,41 +907,9 @@
    REGISTER LINK
 ================================================== */
 
-.login-register-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 6px;
-
-  margin-top: 22px;
-
-  color: #7d94a0;
-
-  font-size: 11px;
-}
-
-.login-register-link {
-  color: #087ac4;
-
-  font-size: 11px;
-  font-weight: 800;
-
-  text-decoration: none;
-
-  transition: color 0.18s ease;
-}
-
-.login-register-link:hover {
-  color: #073f78;
-
-  text-decoration: underline;
-}
-
-
 /* ==================================================
    SECURITY
-================================================== */
+   ================================================== */
 
 .login-security {
   display: flex;

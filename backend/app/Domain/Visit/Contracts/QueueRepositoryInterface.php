@@ -3,6 +3,7 @@
 namespace App\Domain\Visit\Contracts;
 
 use App\Models\Queue;
+use Illuminate\Support\Collection;
 
 interface QueueRepositoryInterface
 {
@@ -10,5 +11,8 @@ interface QueueRepositoryInterface
 
     public function countTodayByFacilityAndPolyclinic(int $facilityId, ?int $polyclinicId, string $date): int;
 
-    public function listTodayByFacility(int $facilityId, ?int $polyclinicId, string $date);
+    /** Kunci baris faskes sebagai mutex penomoran; selalu ada, aman untuk polyclinic_id NULL. */
+    public function lockNumberingForFacility(int $facilityId): void;
+
+    public function listTodayByFacility(int $facilityId, ?int $polyclinicId, string $date): Collection;
 }

@@ -12,13 +12,9 @@ class Visit extends Model
     use HasFactory;
 
     protected $fillable = [
-        'patient_id', 'facility_id', 'polyclinic_id', 'registered_by', 'doctor_id',
-        'identification_method', 'payment_method', 'bpjs_number', 'bpjs_verified_at',
+        'patient_id', 'facility_id', 'polyclinic_id', 'registered_by',
+        'identification_method', 'payment_method', 'bpjs_number',
         'referral_letter_number', 'status', 'notes',
-    ];
-
-    protected $casts = [
-        'bpjs_verified_at' => 'datetime',
     ];
 
     public function patient(): BelongsTo
@@ -41,10 +37,7 @@ class Visit extends Model
         return $this->belongsTo(User::class, 'registered_by');
     }
 
-    public function doctor(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'doctor_id');
-    }
+    
 
     public function stageLogs(): HasMany
     {

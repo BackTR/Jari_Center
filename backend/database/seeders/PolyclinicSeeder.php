@@ -10,20 +10,20 @@ class PolyclinicSeeder extends Seeder
 {
     public function run(): void
     {
-        $rsSehatAbadi = Facility::where('code', 'RS001')->first();
-
         $polyclinics = [
-            ['name' => 'Poli Penyakit Dalam', 'code' => 'PD'],
-            ['name' => 'Poli Anak', 'code' => 'ANAK'],
-            ['name' => 'Poli Umum', 'code' => 'UMUM'],
-            ['name' => 'Poli Gigi', 'code' => 'GIGI'],
+            'PD' => 'Poli Penyakit Dalam',
+            'ANAK' => 'Poli Anak',
+            'UMUM' => 'Poli Umum',
+            'GIGI' => 'Poli Gigi',
         ];
 
-        foreach ($polyclinics as $poli) {
-            Polyclinic::updateOrCreate(
-                ['facility_id' => $rsSehatAbadi->id, 'code' => $poli['code']],
-                ['name' => $poli['name'], 'is_active' => true]
-            );
+        foreach (Facility::all() as $facility) {
+            foreach ($polyclinics as $code => $name) {
+                Polyclinic::updateOrCreate(
+                    ['facility_id' => $facility->id, 'code' => $code],
+                    ['name' => $name, 'is_active' => true]
+                );
+            }
         }
     }
 }

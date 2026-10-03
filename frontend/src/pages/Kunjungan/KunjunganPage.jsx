@@ -5,273 +5,24 @@ import { getVisits } from '../../api/visits.js'
 import { getQueues } from '../../api/queues.js'
 import { extractErrorMessage } from '../../utils/errors.js'
 import { stageLabel } from '../../utils/stage.js'
+import {
+  ArrowRightIcon,
+  CalendarIcon,
+  CheckCircleIcon,
+  ClockIcon,
+  FilterIcon,
+  HospitalIcon,
+  QueueIcon,
+  SearchIcon,
+  UserIcon,
+  VisitIcon,
+} from '../../components/icons.jsx'
 import './KunjunganPage.css'
 
 
 /* =========================================================
-   ICONS
-========================================================= */
-
-function VisitIcon({ size = 22 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect
-        x="4"
-        y="3.5"
-        width="16"
-        height="17"
-        rx="2"
-      />
-
-      <path d="M8 7.5h8" />
-      <path d="M8 11.5h8" />
-      <path d="M8 15.5h4" />
-
-      <circle
-        cx="16.5"
-        cy="15.5"
-        r="2"
-      />
-    </svg>
-  )
-}
-
-
-function SearchIcon({ size = 18 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle
-        cx="10.8"
-        cy="10.8"
-        r="6.3"
-      />
-
-      <path d="m16 16 5 5" />
-    </svg>
-  )
-}
-
-
-function FilterIcon({ size = 18 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M4 6h16" />
-      <path d="M7 12h10" />
-      <path d="M10 18h4" />
-    </svg>
-  )
-}
-
-
-function UserIcon({ size = 18 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle
-        cx="12"
-        cy="8"
-        r="3.5"
-      />
-
-      <path d="M5 20c.7-3.7 3-5.5 7-5.5s6.3 1.8 7 5.5" />
-    </svg>
-  )
-}
-
-
-function HospitalIcon({ size = 18 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M4 21V6h16v15" />
-
-      <path d="M8 6V3h8v3" />
-
-      <path d="M9 10h6" />
-      <path d="M12 7v6" />
-
-      <path d="M8 17h2" />
-      <path d="M14 17h2" />
-      <path d="M8 21v-4" />
-      <path d="M16 21v-4" />
-    </svg>
-  )
-}
-
-
-function QueueIcon({ size = 18 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect
-        x="4"
-        y="3.5"
-        width="16"
-        height="17"
-        rx="2"
-      />
-
-      <path d="M8 7.5h8" />
-
-      <path d="M8 11.5h2" />
-      <path d="M14 11.5h2" />
-
-      <path d="M8 15.5h2" />
-      <path d="M14 15.5h2" />
-    </svg>
-  )
-}
-
-
-function ClockIcon({ size = 17 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle
-        cx="12"
-        cy="12"
-        r="8.5"
-      />
-
-      <path d="M12 7v5l3 2" />
-    </svg>
-  )
-}
-
-
-function CheckCircleIcon({ size = 17 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle
-        cx="12"
-        cy="12"
-        r="8.5"
-      />
-
-      <path d="m8.5 12 2.3 2.3 4.7-5" />
-    </svg>
-  )
-}
-
-
-function ArrowRightIcon({ size = 17 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h13" />
-      <path d="m13 6 6 6-6 6" />
-    </svg>
-  )
-}
-
-
-function CalendarIcon({ size = 17 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect
-        x="3"
-        y="4"
-        width="18"
-        height="17"
-        rx="2"
-      />
-
-      <path d="M16 2v4" />
-      <path d="M8 2v4" />
-      <path d="M3 10h18" />
-    </svg>
-  )
-}
-
-
-/* =========================================================
    HELPERS
-========================================================= */
+   ========================================================= */
 
 function getInitials(name = '') {
   const words = name
@@ -298,17 +49,23 @@ function getInitials(name = '') {
 
 function getStatusKey(status) {
   switch (status) {
-    case 'waiting_verification':
+    case 'pending_verification':
       return 'waiting'
 
     case 'verified':
+      return 'verified'
+
+    case 'registered':
       return 'registered'
 
-    case 'cancelled':
-      return 'cancelled'
+    case 'in_service':
+      return 'in_service'
 
     case 'completed':
       return 'completed'
+
+    case 'cancelled':
+      return 'cancelled'
 
     default:
       return status || 'unknown'
@@ -330,60 +87,13 @@ function getStatusLabel(status) {
 ========================================================= */
 
 function normalizeVisit(visit, queues = []) {
-  /*
-   * Cari antrean yang benar-benar milik kunjungan ini.
-   *
-   * Prioritas:
-   * 1. queue.visit_id === visit.id
-   * 2. queue.patient_id === visit.patient.id
-   *
-   * Jadi nomor antrean tidak lagi bergantung pada
-   * data dummy / data antrean yang berbeda.
-   */
-
   const visitId = Number(visit.id)
 
-  const patientId = visit.patient?.id
-    ? Number(visit.patient.id)
-    : null
+  const matchedQueue = queues.find(
+    (queue) => queue.visit_id != null && Number(queue.visit_id) === visitId
+  )
 
-  let matchedQueue = null
-
-  /*
-   * PRIORITAS 1
-   * Cocokkan langsung berdasarkan visit_id.
-   */
-  if (visitId) {
-    matchedQueue = queues.find(
-      (queue) =>
-        queue.visit_id !== null &&
-        queue.visit_id !== undefined &&
-        Number(queue.visit_id) === visitId
-    )
-  }
-
-  /*
-   * PRIORITAS 2
-   * Kalau queue belum membawa visit_id,
-   * cocokkan berdasarkan patient_id.
-   */
-  if (!matchedQueue && patientId) {
-    matchedQueue = queues.find(
-      (queue) =>
-        queue.patient_id !== null &&
-        queue.patient_id !== undefined &&
-        Number(queue.patient_id) === patientId
-    )
-  }
-
-  /*
-   * Kalau VisitResource sudah menyediakan queue,
-   * tetap gunakan sebagai fallback.
-   */
-  const queue =
-    matchedQueue ||
-    visit.queue ||
-    null
+  const queue = matchedQueue || visit.queue || null
 
   return {
     ...visit,
@@ -411,14 +121,6 @@ function normalizeVisit(visit, queues = []) {
     queueNumber:
       queue?.queue_number ||
       '—',
-
-    queueStatus:
-      queue?.status ||
-      null,
-
-    queueCalledAt:
-      queue?.called_at ||
-      null,
 
     status:
       visit.status,
@@ -930,8 +632,16 @@ export default function KunjunganPage() {
                 Menunggu Verifikasi
               </option>
 
+              <option value="verified">
+                Terverifikasi
+              </option>
+
               <option value="registered">
                 Terdaftar
+              </option>
+
+              <option value="in_service">
+                Sedang Dilayani
               </option>
 
               <option value="completed">

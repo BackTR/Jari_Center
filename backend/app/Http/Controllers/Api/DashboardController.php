@@ -18,7 +18,7 @@ class DashboardController extends Controller
 
     public function show(Request $request, int $facilityId): JsonResponse
     {
-        if (! $this->canAccessFacility($request, $facilityId)) {
+        if (! $request->user()->canAccessFacility($facilityId)) {
             return $this->forbiddenResponse();
         }
 
@@ -29,7 +29,7 @@ class DashboardController extends Controller
 
     public function queues(Request $request, int $facilityId): JsonResponse
     {
-        if (! $this->canAccessFacility($request, $facilityId)) {
+        if (! $request->user()->canAccessFacility($facilityId)) {
             return $this->forbiddenResponse();
         }
 
@@ -41,26 +41,21 @@ class DashboardController extends Controller
             $request->query('date'),
         );
 
+        // visit_status (bukan "status"): antrean tidak punya tahap sendiri,
+        // tahapnya adalah tahap kunjungan.
         $data = $queues->map(fn ($queue) => [
             'id' => $queue->id,
+            'visit_id' => $queue->visit_id,
             'queue_number' => $queue->queue_number,
-            'status' => $queue->status,
+            'visit_status' => $queue->currentStatus(),
             'polyclinic' => $queue->polyclinic?->name,
             'patient' => [
                 'jari_id' => $queue->patient->jari_id,
                 'name' => $queue->patient->name,
             ],
-            'called_at' => $queue->called_at?->toIso8601String(),
         ]);
 
         return response()->json(['data' => $data]);
-    }
-
-    private function canAccessFacility(Request $request, int $facilityId): bool
-    {
-        $user = $request->user();
-
-        return $user->role === 'super_admin' || $user->facility_id === $facilityId;
     }
 
     private function forbiddenResponse(): JsonResponse

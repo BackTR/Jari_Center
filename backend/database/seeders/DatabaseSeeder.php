@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             PolyclinicSeeder::class,
             PatientSeeder::class,
+            VisitSeeder::class,
         ]);
     }
 }

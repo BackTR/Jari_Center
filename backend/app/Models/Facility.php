@@ -9,6 +9,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Facility extends Model
 {
     use HasFactory;
+
+    /** Wajib sama persis dengan enum di migration create_facilities_table. */
+    public const TYPES = [
+        'hospital', 'clinic', 'puskesmas', 'laboratory', 'pharmacy', 'doctor', 'other',
+    ];
+
     protected $fillable = [
         'name',
         'type',
