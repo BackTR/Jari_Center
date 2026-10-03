@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StorePatientRequest extends FormRequest
 {
@@ -31,6 +32,10 @@ class StorePatientRequest extends FormRequest
             'phone' => ['nullable', 'string', 'max:20'],
             'insurance_provider' => ['nullable', 'string', 'max:100'],
             'insurance_number' => ['nullable', 'string', 'max:100'],
+            'facility_id' => [
+                Rule::requiredIf(fn () => $this->user()?->facility_id === null),
+                Rule::exists('facilities', 'id'),
+            ],
         ];
     }
 }

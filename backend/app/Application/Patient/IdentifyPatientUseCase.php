@@ -3,6 +3,8 @@
 namespace App\Application\Patient;
 
 use App\Domain\Patient\Contracts\PatientRepositoryInterface;
+use App\Models\Patient;
+use App\Models\User;
 use Illuminate\Support\Collection;
 
 class IdentifyPatientUseCase
@@ -12,17 +14,19 @@ class IdentifyPatientUseCase
     ) {
     }
 
-    public function execute(string $type, string $value): Collection
+    public function execute(string $type, string $value, User $user): Collection
     {
+        $facilityId = $user->role === 'super_admin' ? null : $user->facility_id;
+
         return match ($type) {
-            'jari_id' => $this->wrapSingle($this->patientRepository->findByJariId($value)),
-            'nik' => $this->wrapSingle($this->patientRepository->findByNik($value)),
-            'keyword' => $this->patientRepository->search($value),
+            'jari_id' => $this->wrapSingle($this->patientRepository->findByJariId($value, $facilityId)),
+            'nik' => $this->wrapSingle($this->patientRepository->findByNik($value, $facilityId)),
+            'keyword' => $this->patientRepository->search($value, $facilityId),
             default => collect(),
         };
     }
 
-    private function wrapSingle(?\App\Models\Patient $patient): Collection
+    private function wrapSingle(?Patient $patient): Collection
     {
         return $patient ? collect([$patient]) : collect();
     }

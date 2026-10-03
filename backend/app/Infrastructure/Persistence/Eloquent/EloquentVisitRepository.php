@@ -14,7 +14,7 @@ class EloquentVisitRepository implements VisitRepositoryInterface
 
     public function findById(int $id): ?Visit
     {
-        return Visit::with(['patient', 'facility', 'polyclinic', 'stageLogs'])->find($id);
+        return Visit::with(['patient', 'facility', 'polyclinic', 'stageLogs', 'queue'])->find($id);
     }
 
     public function updateStatus(Visit $visit, string $newStatus): Visit

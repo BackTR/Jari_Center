@@ -3,10 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Facility extends Model
 {
+    use HasFactory;
+
+    /** Wajib sama persis dengan enum di migration create_facilities_table. */
+    public const TYPES = [
+        'hospital', 'clinic', 'puskesmas', 'laboratory', 'pharmacy', 'doctor', 'other',
+    ];
+
     protected $fillable = [
         'name',
         'type',
@@ -20,8 +28,9 @@ class Facility extends Model
         "is_active" => 'boolean',
     ];
 
-    public function users():HasMany{
-        return $this->hasMany(user::class);
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class);
     }
 
     public function polyclinics():HasMany
@@ -33,8 +42,8 @@ class Facility extends Model
     {
         return $this->hasMany(PatientFacilityMapping::class);
     }
-    public function visits():HasMany
+    public function visits(): HasMany
     {
-        return $this->hasMany(visit::class);
+        return $this->hasMany(Visit::class);
     }
 }

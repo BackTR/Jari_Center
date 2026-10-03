@@ -29,7 +29,10 @@ class AuthController extends Controller
             ]);
         }
 
-        $token = $user->createToken('petugas-token')->plainTextToken;
+        // Expiry 12 jam. Tanpa ini token valid selamanya karena kolom
+        // expires_at tidak pernah diisi — user nonaktif masih bisa kerja
+        // sampai token dicabut manual.
+        $token = $user->createToken('petugas-token', expiresAt: now()->addHours(12))->plainTextToken;
 
         return response()->json([
             'user' => [
@@ -38,6 +41,7 @@ class AuthController extends Controller
                 'email' => $user->email,
                 'role' => $user->role,
                 'facility_id' => $user->facility_id,
+                'facility_name' => $user->facility?->name,
             ],
             'token' => $token,
         ]);

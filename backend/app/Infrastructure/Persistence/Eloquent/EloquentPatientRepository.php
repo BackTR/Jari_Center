@@ -4,27 +4,48 @@ namespace App\Infrastructure\Persistence\Eloquent;
 
 use App\Domain\Patient\Contracts\PatientRepositoryInterface;
 use App\Models\Patient;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class EloquentPatientRepository implements PatientRepositoryInterface
 {
-    public function findByJariId(string $jariId): ?Patient
+    public function findByJariId(string $jariId, ?int $facilityId = null): ?Patient
     {
-        return Patient::where('jari_id', $jariId)->first();
+        return $this->scopedToFacility($facilityId)->where('jari_id', $jariId)->first();
     }
 
-    public function findByNik(string $nik): ?Patient
+    public function findByNik(string $nik, ?int $facilityId = null): ?Patient
     {
-        return Patient::where('nik', $nik)->first();
+        return $this->scopedToFacility($facilityId)->where('nik', $nik)->first();
     }
 
-    public function search(string $keyword): Collection
+    public function search(string $keyword, ?int $facilityId = null): Collection
     {
-        return Patient::where('name', 'like', "%{$keyword}%")
-            ->orWhere('nik', 'like', "%{$keyword}%")
-            ->orWhere('jari_id', 'like', "%{$keyword}%")
+        return $this->scopedToFacility($facilityId)
+            ->where(function ($query) use ($keyword) {
+                $query->where('name', 'like', "%{$keyword}%")
+                    ->orWhere('nik', 'like', "%{$keyword}%")
+                    ->orWhere('jari_id', 'like', "%{$keyword}%");
+            })
             ->limit(20)
             ->get();
+    }
+
+    /**
+     * Pasien bersifat global, tapi petugas hanya boleh melihat pasien yang
+     * sudah pernah terdaftar di faskes-nya. Super admin kirim null (tanpa scope).
+     */
+    private function scopedToFacility(?int $facilityId): Builder
+    {
+        $query = Patient::query();
+
+        if ($facilityId === null) {
+            return $query;
+        }
+
+        // Aturan "milik faskes ini" didefinisikan di Patient::scopeLinkedToFacility
+        // supaya tidak bisa berbeda dari User::canReachPatient (sidik jari).
+        return $query->linkedToFacility($facilityId);
     }
 
     public function create(array $data): Patient

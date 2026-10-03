@@ -19,7 +19,7 @@ class PatientResource extends JsonResource
             'jari_id' => $this->jari_id,
             'nik' => $this->nik,
             'name' => $this->name,
-            'date_of_birth' => $this->date_of_birth->format('Y-m-d'),
+            'date_of_birth' => $this->date_of_birth?->format('Y-m-d'),
             'gender' => $this->gender,
             'address' => $this->address,
             'phone' => $this->phone,

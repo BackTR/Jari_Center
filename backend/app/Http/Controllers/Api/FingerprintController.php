@@ -27,6 +27,12 @@ class FingerprintController extends Controller
             return response()->json(['message' => 'Pasien tidak ditemukan.'], 404);
         }
 
+        if (! $request->user()->canReachPatient($patient)) {
+            return response()->json([
+                'message' => 'Anda tidak memiliki akses ke pasien ini.',
+            ], 403);
+        }
+
         try {
             $updated = $this->enrollFingerprintUseCase->execute(
                 $patient,
@@ -48,7 +54,9 @@ class FingerprintController extends Controller
             $request->validated('template'),
         );
 
-        if (! $patient) {
+        // Tidak cocok DAN tidak punya akses harus balas identik, kalau tidak
+        // pemanggil bisa menebak sidik jari itu milik siapa.
+        if (! $patient || ! $request->user()->canReachPatient($patient)) {
             return response()->json([
                 'matched' => false,
                 'message' => 'Sidik jari tidak cocok dengan data pasien manapun.',
@@ -62,4 +70,5 @@ class FingerprintController extends Controller
             'data' => new PatientResource($patient),
         ]);
     }
-}
+
+    }

@@ -7,11 +7,11 @@ use Illuminate\Support\Collection;
 
 interface PatientRepositoryInterface
 {
-    public function findByJariId(string $jariId): ?Patient;
+    public function findByJariId(string $jariId, ?int $facilityId = null): ?Patient;
 
-    public function findByNik(string $nik): ?Patient;
+    public function findByNik(string $nik, ?int $facilityId = null): ?Patient;
 
-    public function search(string $keyword): Collection;
+    public function search(string $keyword, ?int $facilityId = null): Collection;
 
     public function create(array $data): Patient;
 

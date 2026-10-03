@@ -1,0 +1,280 @@
+.petugas-page {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.petugas-header {
+  margin-bottom: 24px;
+}
+
+.petugas-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.petugas-header p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.petugas-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.petugas-quick-actions {
+  margin-bottom: 24px;
+}
+
+.petugas-quick-actions h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 16px 0;
+}
+
+.petugas-quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.petugas-quick-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.petugas-quick-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.petugas-quick-action-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+}
+
+.petugas-quick-action--blue .petugas-quick-action-icon {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.petugas-quick-action--green .petugas-quick-action-icon {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.petugas-quick-action--cyan .petugas-quick-action-icon {
+  background: #e0f7fa;
+  color: #00acc1;
+}
+
+.petugas-quick-action--purple .petugas-quick-action-icon {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.petugas-quick-action span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.petugas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+}
+
+.petugas-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.petugas-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.petugas-card-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.petugas-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.petugas-btn--primary {
+  background: #1976d2;
+  color: #fff;
+}
+
+.petugas-btn--primary:hover {
+  background: #1565c0;
+}
+
+.petugas-queue-list,
+.petugas-visit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.petugas-queue-item,
+.petugas-visit-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.petugas-queue-number {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1976d2;
+  min-width: 60px;
+}
+
+.petugas-queue-info,
+.petugas-visit-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.petugas-queue-info strong,
+.petugas-visit-info strong {
+  font-size: 14px;
+  color: #333;
+}
+
+.petugas-queue-info span,
+.petugas-visit-info span {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Antrean dan kunjungan pakai kelas yang sama: keduanya menampilkan
+   tahap kunjungan, jadi warna status-nya identik. */
+.petugas-visit-status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.petugas-visit-status--pending_verification,
+.petugas-visit-status--registered {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.petugas-visit-status--verified,
+.petugas-visit-status--in_service {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.petugas-visit-status--completed {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.petugas-visit-status--cancelled {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.petugas-empty {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  font-style: italic;
+}
+
+.petugas-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  gap: 16px;
+}
+
+.petugas-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e0e0e0;
+  border-top-color: #1976d2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.petugas-error {
+  text-align: center;
+  padding: 40px;
+  background: #ffebee;
+  border-radius: 12px;
+}
+
+.petugas-error strong {
+  display: block;
+  font-size: 18px;
+  color: #c62828;
+  margin-bottom: 8px;
+}
+
+.petugas-error p {
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.petugas-error button {
+  padding: 8px 16px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}

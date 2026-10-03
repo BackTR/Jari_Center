@@ -4,6 +4,7 @@ namespace App\Application\Patient;
 
 use App\Domain\Patient\Contracts\PatientFacilityMappingRepositoryInterface;
 use App\Models\PatientFacilityMapping;
+use Illuminate\Support\Facades\DB;
 
 class AssignFacilityMedicalRecordService
 {
@@ -14,19 +15,21 @@ class AssignFacilityMedicalRecordService
 
     public function getOrCreate(int $patientId, int $facilityId): PatientFacilityMapping
     {
-        $existing = $this->mappingRepository->findByPatientAndFacility($patientId, $facilityId);
+        return DB::transaction(function () use ($patientId, $facilityId) {
+            $existing = $this->mappingRepository->findByPatientAndFacility($patientId, $facilityId);
 
-        if ($existing) {
-            return $existing;
-        }
+            if ($existing) {
+                return $existing;
+            }
 
-        $sequential = $this->mappingRepository->countByFacility($facilityId) + 1;
-        $mrn = 'RM' . str_pad((string) $sequential, 9, '0', STR_PAD_LEFT);
+            $sequential = $this->mappingRepository->countByFacility($facilityId) + 1;
+            $mrn = 'RM' . str_pad((string) $sequential, 9, '0', STR_PAD_LEFT);
 
-        return $this->mappingRepository->create([
-            'patient_id' => $patientId,
-            'facility_id' => $facilityId,
-            'medical_record_number' => $mrn,
-        ]);
+            return $this->mappingRepository->create([
+                'patient_id' => $patientId,
+                'facility_id' => $facilityId,
+                'medical_record_number' => $mrn,
+            ]);
+        });
     }
 }

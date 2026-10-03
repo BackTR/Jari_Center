@@ -11,18 +11,32 @@ class Queue extends Model
     use HasFactory;
 
     protected $fillable = [
-        'patient_id', 'facility_id', 'polyclinic_id',
-        'queue_number', 'queue_date', 'status', 'called_at',
+        'patient_id', 'visit_id', 'facility_id', 'polyclinic_id',
+        'queue_number', 'queue_date',
     ];
 
     protected $casts = [
         'queue_date' => 'date',
-        'called_at' => 'datetime',
     ];
+
+    /**
+     * Tahap antrean mengikuti tahap kunjungan (visits.status) — jangan
+     * simpan status sendiri di sini, itu pernah jadi sumber kedua yang
+     * tidak pernah ter-update.
+     */
+    public function currentStatus(): string
+    {
+        return $this->visit?->status ?? 'pending_verification';
+    }
 
     public function patient(): BelongsTo
     {
         return $this->belongsTo(Patient::class);
+    }
+
+    public function visit(): BelongsTo
+    {
+        return $this->belongsTo(Visit::class);
     }
 
     public function facility(): BelongsTo
